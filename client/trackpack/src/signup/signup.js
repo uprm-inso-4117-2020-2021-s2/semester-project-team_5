@@ -11,12 +11,13 @@ import {
   FormLabel,
   Input,
 } from "@chakra-ui/react";
+import { signIn } from "./signup-service";
 
 import { Button } from "@chakra-ui/button";
 
-import "./signin.css";
+import "./signup.css";
 
-class Signin extends Component {
+class Signup extends Component {
   constructor() {
     super();
 
@@ -38,6 +39,9 @@ class Signin extends Component {
       email: this.state.email,
       password: this.state.password,
     };
+
+    signIn(newUser); //Register user
+    this.props.history.push("/home"); //Redirect to homepage
   };
 
   onChange = (e) => {
@@ -95,6 +99,7 @@ class Signin extends Component {
                 />
               </FormControl>
               <Button
+                type="submit"
                 borderRadius="20px"
                 color="white"
                 backgroundColor="#2C148C"
@@ -104,9 +109,14 @@ class Signin extends Component {
             </form>
           </Box>
         </Box>
-          <Flex flexDirection="column">
+        <Flex flexDirection="column">
           <a>Already have an account?</a>
-          <Button borderRadius="20px" color="white" backgroundColor="#2C148C" marginBottom="20px">
+          <Button
+            borderRadius="20px"
+            color="white"
+            backgroundColor="#2C148C"
+            marginBottom="20px"
+          >
             Sign-In
           </Button>
         </Flex>
@@ -115,4 +125,4 @@ class Signin extends Component {
   }
 }
 
-export default Signin;
+export default Signup;

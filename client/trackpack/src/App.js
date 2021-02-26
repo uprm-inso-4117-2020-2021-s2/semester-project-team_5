@@ -4,7 +4,7 @@ import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 import Topnav from "./components/Topnav";
-import Signin from "./signin/signin";
+import Signup from "./signup/signup";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -14,7 +14,7 @@ function App() {
       <Router>
         <div className="App">
           <Topnav />
-          <Route exact path="/signin" component={Signin} />
+          <Route exact path="/signup" component={Signup} />
           <header className="App-header">
             <img src={logo} className="App-logo" alt="logo" />
             <p>

@@ -11,6 +11,7 @@ const Topnav = () => {
       <Nav className="mr-auto">
         <Nav.Link id="link">Tracking</Nav.Link>
         <Nav.Link href="signin" id="link">Sign In</Nav.Link>
+        <Nav.Link href="signup" id="link">Sign Up</Nav.Link>
       </Nav>
     </Navbar.Collapse>
   </Navbar>
