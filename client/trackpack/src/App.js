@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import Topnav from './components/Topnav'
-import 'bootstrap/dist/css/bootstrap.min.css';
+//import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
