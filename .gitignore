@@ -98,4 +98,11 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+### Python ###
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,windows,macos,linux,git
