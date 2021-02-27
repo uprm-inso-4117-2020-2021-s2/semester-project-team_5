@@ -90,6 +90,22 @@ class UserHandler:
         return s.dumps({'email': email}).decode('utf-8')
 
     @staticmethod
+    def getUserByUsername(username):
+        try:
+            user = User.getUserByUsername(username)
+            if user:
+                user_dict = to_dict(user)
+                result = {
+                    "message": "Success!",
+                    "user": user_dict
+                }
+                return jsonify(result), 200
+            else:
+                return jsonify(reason="User does not exist."), 401
+        except Exception as e:
+            return jsonify(reason="Server error", error=e.__str__()), 500
+
+    @staticmethod
     def verify_user_token(token):
         s = Serializer(app.config['SECRET_KEY'])
         try:

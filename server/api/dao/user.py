@@ -6,9 +6,9 @@ class User(db.Model):
     REQUIRED_PARAMETERS = {'email', 'password', 'username'}
     
     __tablename__ = 'user'
-    user_id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
-    username = db.Column(db.String(30), nullable=False)
-    email = db.Column(db.String(256), nullable=False)
+    user_id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
+    username = db.Column(db.String(30), nullable=False, unique=True)
+    email = db.Column(db.String(256), nullable=False, unique=True)
     password = db.Column(db.String(256), nullable=False)
     active = db.Column(db.Boolean, nullable=False, default =False)
 
@@ -33,6 +33,10 @@ class User(db.Model):
     @staticmethod
     def getUserByEmail(uemail):
         return User().query.filter_by(email=uemail).first()
+
+    @staticmethod
+    def getUserByUsername(uname):
+        return User().query.filter_by(username=uname).first()
     
     def activateUser(self):
         self.active = True

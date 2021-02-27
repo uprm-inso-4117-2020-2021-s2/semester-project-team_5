@@ -14,6 +14,16 @@ def get_all_users_or_create():
     elif request.method == 'POST':
         return UserHandler.createUser(request.json)
 
+@app.route("/users/username/<string:username>", methods=['GET'])
+def get__user_by_username(username):
+    if request.method == 'GET':
+        return UserHandler.getUserByUsername(username)
+
+@app.route("/users/email/<string:email>", methods=['GET'])
+def get__user_by_email(email):
+    if request.method == 'GET':
+        return UserHandler.getUserByEmail(email)
+
 @app.route('/account-activation', methods=['POST'])
 def activation_request():
     if(request.method == "POST"):
