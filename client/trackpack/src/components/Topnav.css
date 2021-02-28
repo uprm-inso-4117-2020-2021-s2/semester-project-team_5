@@ -17,32 +17,20 @@
   }
 
 /* Style the navigation menu */
-.myNavbar {
-    position: fixed;
-    width: 100% ;
-    background-color: #2C148C;
-  }
+.navbar { background-color: #2C148C; }
   
   /* Navigation links */
-#link {
-    padding-right: 8vw;
-    color: white;
-    text-decoration: none;
-    font-size: 1.25vw;
+.nav-link {
+    padding-right: 8rem !important;
+    color: white !important;
+    font-size: 1.05rem;
     font-family: 'Tauri';
-    text-align: center; /* If you want the text to be centered */
   }
 
-#link:hover{
+.nav-link:hover{
     cursor: pointer;
     filter:    brightness(0.9)contrast(0.95)hue-rotate(0deg);
     transition: transform .5s ease;
 }
 
-
-
-#navbar_logo{
-      padding: 0.8vw;
-      float: left;
-      width: 30%;
-  }
+.card-img{ width: 140px !important; }
