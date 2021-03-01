@@ -50,3 +50,7 @@ def send_activation_email(email):
 If you did not make this account then simply ignore this email.
 '''
     mail.send(msg)
+
+@app.route('/login', methods = ['POST'])
+def sign_in():
+    UserHandler.sign_in(request.json)

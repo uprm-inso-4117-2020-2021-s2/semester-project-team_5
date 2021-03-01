@@ -25,3 +25,6 @@ Werkzeug==1.0.1
 yarg==0.1.9
 zope.event==4.5.0
 zope.interface==5.2.0
+passlib
+flask-jwt-extended
+simplejson
