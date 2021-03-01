@@ -8,7 +8,7 @@ import HP from "./components/homepage";
 
 ReactDOM.render(
   <React.StrictMode>
-    <HP />
+    <App/>
   </React.StrictMode>,
   document.getElementById('root')
 );

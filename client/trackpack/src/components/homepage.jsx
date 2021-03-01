@@ -13,7 +13,6 @@ class Homepage extends Component {
   render() {
     return (
       <body>
-        <Topnav />
         <section>
           <img
             className="homeImage"
