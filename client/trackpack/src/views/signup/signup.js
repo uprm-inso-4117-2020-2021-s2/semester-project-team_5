@@ -67,7 +67,7 @@ class Signup extends Component {
             </Heading>
           </Box>
           <Box my={4} textAlign="center">
-            <form onSubmit={this.onSignIn}>
+            <form onSubmit={this.onSignUp}>
               <FormControl className="form-item">
                 <FormLabel color="white">Name</FormLabel>
                 <Input
