@@ -1,5 +1,5 @@
 /*
-signin.js (component for registration)
+signup.js (component for registration)
 */
 
 import React, { Component } from "react";
@@ -11,7 +11,7 @@ import {
   FormLabel,
   Input,
 } from "@chakra-ui/react";
-import { signIn } from "./signup-service";
+import { signUp } from "./signup-service";
 
 import { Button } from "@chakra-ui/button";
 
@@ -21,7 +21,7 @@ class Signup extends Component {
   constructor() {
     super();
 
-    this.onSignIn = this.onSignIn.bind(this);
+    this.onSignUp = this.onSignUp.bind(this);
 
     this.state = {
       name: "",
@@ -31,7 +31,7 @@ class Signup extends Component {
     };
   }
 
-  onSignIn = (e) => {
+  onSignUp = (e) => {
     e.preventDefault();
 
     const newUser = {
@@ -40,7 +40,7 @@ class Signup extends Component {
       password: this.state.password,
     };
 
-    signIn(newUser); //Register user
+    signUp(newUser); //Register user
     this.props.history.push("/home"); //Redirect to homepage
   };
 

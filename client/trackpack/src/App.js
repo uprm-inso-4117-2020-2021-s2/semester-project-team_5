@@ -4,7 +4,7 @@ import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 import Topnav from "./components/Topnav";
-import Signup from "./signup/signup";
+import Signup from "./views/signup/signup";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
