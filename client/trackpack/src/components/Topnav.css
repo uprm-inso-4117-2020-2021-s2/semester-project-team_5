@@ -18,19 +18,19 @@
 
 /* Style the navigation menu */
 .navbar { background-color: #2C148C; }
-
-/* Navigation links */
+  
+  /* Navigation links */
 .nav-link {
-  padding-right: 8rem !important;
-  color: white !important;
-  font-size: 1.05rem;
-  font-family: 'Tauri';
-}
+    padding-right: 8rem !important;
+    color: white !important;
+    font-size: 1.05rem;
+    font-family: 'Tauri';
+  }
 
 .nav-link:hover{
-  cursor: pointer;
-  filter:    brightness(0.9)contrast(0.95)hue-rotate(0deg);
-  transition: transform .5s ease;
+    cursor: pointer;
+    filter:    brightness(0.9)contrast(0.95)hue-rotate(0deg);
+    transition: transform .5s ease;
 }
 
 .card-img{ width: 140px !important; }
