@@ -1,3 +1,5 @@
+/* You can add global styles to this file, and also import other style files */
+/* latin-ext */
 @font-face {
   font-family: "Tauri";
   font-style: normal;
@@ -20,31 +22,26 @@
     U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
     U+FEFF, U+FFFD;
 }
+
 /* Style the navigation menu */
-.myNavbar {
-  position: fixed;
-  width: 100%;
+.navbar {
   background-color: #2c148c;
 }
 
 /* Navigation links */
-#link {
-  padding-right: 8vw;
-  color: white;
-  text-decoration: none;
-  font-size: 1.25vw;
+.nav-link {
+  padding-right: 8rem !important;
+  color: white !important;
+  font-size: 1.05rem;
   font-family: "Tauri";
-  text-align: center; /* If you want the text to be centered */
 }
 
-#link:hover {
+.nav-link:hover {
   cursor: pointer;
   filter: brightness(0.9) contrast(0.95) hue-rotate(0deg);
   transition: transform 0.5s ease;
 }
 
-#navbar_logo {
-  padding: 0.8vw;
-  float: left;
-  width: 30%;
+.card-img {
+  width: 140px !important;
 }
