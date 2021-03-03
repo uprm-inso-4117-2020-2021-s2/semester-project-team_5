@@ -9,7 +9,8 @@ import Homepage from "./components/homepage";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
-  return (
+  return (  
+    <ChakraProvider>
    <Router>
       <div>
           <Topnav/>
@@ -24,6 +25,8 @@ function App() {
           {/* <Footer/> */}
       </div>
     </Router>
+    </ChakraProvider>
+
   );
 }
  

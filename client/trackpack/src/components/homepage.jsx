@@ -15,21 +15,22 @@ class Homepage extends Component {
       <Flex
         width="full"
         align="center"
-        justifyContent="center"
-        flexDirection="column"
+        justifyContent="space-between"
+        flexDirection="row"
+        flexWrap="wrap"
       >
-        <section>
+        <div>
           <img
             className="homeImage"
             src="https://i.imgur.com/cwO8vQg.png"
             alt=""
           />
-          <div className="aboutBox">
-            <h2>About us</h2>
-            <p className="aboutUs">TEXT</p>
-            <div className="bottomBar"></div>
-          </div>
-        </section>
+        </div>
+        <div className="aboutBox">
+          <h2>About us</h2>
+          <p className="aboutUs">TEXT</p>
+          <div className="bottomBar"></div>
+        </div>
       </Flex>
     );
   }
