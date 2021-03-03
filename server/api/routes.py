@@ -1,6 +1,6 @@
 from flask import request, url_for, redirect
 from flask_mail import Message
-from api.handler.user import UserHandler
+from user.handler import UserHandler
 from api import app, mail
 
 @app.route('/', methods=['GET'])
@@ -50,3 +50,7 @@ def send_activation_email(email):
 If you did not make this account then simply ignore this email.
 '''
     mail.send(msg)
+
+@app.route('/login', methods = ['POST'])
+def sign_in():
+   return UserHandler.sign_in(request.json)

@@ -1,4 +1,4 @@
-from api.dao.user import User
+from user.dao import User
 from api import db
 
 #run this to create the tables on pgadmin

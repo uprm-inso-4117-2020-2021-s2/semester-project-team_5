@@ -2,6 +2,8 @@ from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
+from flask_jwt_extended import JWTManager
+from enum import IntEnum
 
 #AWS database credentials
 
@@ -18,9 +20,7 @@ app = Flask("trackpack")
 app.config['CORS_HEADER'] = 'Content-type'
 app.config['SQLALCHEMY_DATABASE_URI'] = PROD_DB
 app.config['SECRET_KEY'] = "trackpack"
-
-db = SQLAlchemy(app)
-
+app.config['JWT_SECRET_KEY'] = 'jwt_trackpack'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
@@ -29,6 +29,8 @@ app.config['MAIL_USERNAME'] = 'track.pack4117@gmail.com'
 app.config['MAIL_PASSWORD'] = 'tK4eNbPNqSh27QgUPAl1UQMHW0pPo9RbYQrQJykA'
 mail = Mail(app)
 
+db = SQLAlchemy(app)
+jwt = JWTManager(app)
 CORS(app)
 
 def to_dict(obj):
@@ -41,3 +43,10 @@ def verify_parameters(jsonP, params):
         if param in params and value is None:
             return None
     return jsonP
+
+class HttpStatus(IntEnum):
+    OK = 200
+    CREATED = 201
+    BAD_REQUEST = 400
+    NOT_FOUND = 404
+    INTERNAL_SERVER_ERROR = 500
