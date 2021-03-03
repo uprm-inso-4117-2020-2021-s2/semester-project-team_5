@@ -3,7 +3,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from flask_jwt_extended import JWTManager
-from enum import Enum
+from enum import IntEnum
 
 #AWS database credentials
 
@@ -44,7 +44,7 @@ def verify_parameters(jsonP, params):
             return None
     return jsonP
 
-class HttpStatus(Enum):
+class HttpStatus(IntEnum):
     OK = 200
     CREATED = 201
     BAD_REQUEST = 400

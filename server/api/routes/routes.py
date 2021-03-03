@@ -53,4 +53,4 @@ If you did not make this account then simply ignore this email.
 
 @app.route('/login', methods = ['POST'])
 def sign_in():
-    UserHandler.sign_in(request.json)
+   return UserHandler.sign_in(request.json)

@@ -63,6 +63,7 @@ class UserHandler:
                 email_exists = User.getUserByEmail(json['email'])
                 if email_exists:
                     return jsonify(message="Email already taken. Please use another one."), HttpStatus.BAD_REQUEST
+                valid_params['password'] = sha256.hash(valid_params['password'])
                 created_user = User(**valid_params).create()
                 user_dict = to_dict(created_user)
                 result = {
@@ -119,13 +120,13 @@ class UserHandler:
     @staticmethod
     def sign_in(json):
         #validate data
-        if ('username' in json) and ('password' in json):
+        if ('email' in json) and ('password' in json):
             #get user data from db
-            user = User.getUserByUsername(json['username'])
+            user = User.getUserByEmail(json['email'])
             #if user exists and password match return a valid JWT in the response otherwise return error.
             if user and sha256.verify(json['password'], user.password):
-                access_token = create_access_token(identity = user.username)
+                access_token = create_access_token(identity = user.user_id)
                 return jsonify(access_token = access_token), HttpStatus.OK
             else:
-                return jsonify(Error = 'username or password incorrect'), HttpStatus.NOT_FOUND
+                return jsonify(Error = 'email or password incorrect'), HttpStatus.NOT_FOUND
         return jsonify(Error = 'Malformed body'), HttpStatus.BAD_REQUEST
