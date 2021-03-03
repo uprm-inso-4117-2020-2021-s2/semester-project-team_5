@@ -1,0 +1,35 @@
+@import url("https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap");
+h2 {
+  font-size: 48px;
+}
+.homeImage {
+  margin-top: 124px;
+  margin-left: 150px;
+  width: 658px;
+  height: 430px;
+}
+
+.aboutUs {
+  padding: 200px;
+  width: 750px;
+  border-radius: 20px;
+  background-color: #2c148c;
+}
+
+.aboutBox {
+  float: right;
+  margin-right: 250px;
+  margin-top: 100px;
+  text-align: center;
+  font-size: 35px;
+  font-family: "Bubblegum Sans", cursive;
+}
+
+.bottomBar {
+  min-height: 31px;
+  bottom: 0px;
+  margin-top: -31px;
+  width: 750px;
+  border-radius: 20px;
+  background-color: #f37602;
+}

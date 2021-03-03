@@ -1,21 +1,23 @@
+@import url("https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap");
+
 .form {
-    padding: 20px;
-    margin-top: 20px;
-    border-radius: 40px;
-    background-color: orange;
+  padding: 40px;
+  margin-top: 20px;
+  border-radius: 40px;
+  background-color: orange;
 }
 
 .form-item {
-    padding: 20px;
-    padding-left: -15px;
-    padding-right: -15px;
+  padding: 20px;
+  padding-left: -15px;
+  padding-right: -15px;
 }
 
 .chakra-input.form-input {
-    width: auto;
-    outline: none;
-    border-radius: 13px;
-    border: 0px;
-    padding-left: 10px;
-    background-color: white;
+  width: auto;
+  outline: none;
+  border-radius: 13px;
+  border: 0px;
+  padding-left: 10px;
+  background-color: white;
 }
