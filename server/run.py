@@ -1,6 +1,5 @@
 from gevent.pywsgi import WSGIServer
-from api.routes import routes
-from api import app
+from api import app, routes
 import os
 
 if __name__ == '__main__':

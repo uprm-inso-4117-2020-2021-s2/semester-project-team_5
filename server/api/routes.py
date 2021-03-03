@@ -1,6 +1,6 @@
 from flask import request, url_for, redirect
 from flask_mail import Message
-from api.handler.user import UserHandler
+from user.handler import UserHandler
 from api import app, mail
 
 @app.route('/', methods=['GET'])

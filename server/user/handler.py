@@ -1,5 +1,5 @@
 from flask import jsonify, session
-from api.dao.user import User
+from .dao import User
 from api import to_dict, verify_parameters, app, HttpStatus
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask_jwt_extended import create_access_token
