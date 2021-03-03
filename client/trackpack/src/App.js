@@ -5,33 +5,25 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 import Topnav from "./components/Topnav";
 import Signup from "./views/signup/signup";
-
+import Homepage from "./components/homepage";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (
-    <ChakraProvider>
-      <Router>
-        <div className="App">
-          <Topnav />
-          <Route exact path="/signup" component={Signup} />
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <p>
-              Edit <code>src/App.js</code> and save to reload.
-            </p>
-            <a
-              className="App-link"
-              href="https://reactjs.org"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn React
-            </a>
-          </header>
-        </div>
-      </Router>
-    </ChakraProvider>
+   <Router>
+      <div>
+          <Topnav/>
+          <Switch>
+            <Route exact path="/">
+              <Homepage title="Homepage"/>
+            </Route>
+            <Route path="/signup">
+              <Signup/>
+            </Route>
+          </Switch>
+          {/* <Footer/> */}
+      </div>
+    </Router>
   );
 }
  

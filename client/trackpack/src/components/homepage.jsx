@@ -1,7 +1,7 @@
-import React, { Component, Box } from "react";
+import React, { Component } from "react";
 import Topnav from "./Topnav";
 import "./homepage.css";
-
+import { Flex, Box } from "@chakra-ui/react";
 class Homepage extends Component {
   state = {
     about: "",
@@ -12,8 +12,12 @@ class Homepage extends Component {
   }
   render() {
     return (
-      <body>
-        <Topnav />
+      <Flex
+        width="full"
+        align="center"
+        justifyContent="center"
+        flexDirection="column"
+      >
         <section>
           <img
             className="homeImage"
@@ -26,7 +30,7 @@ class Homepage extends Component {
             <div className="bottomBar"></div>
           </div>
         </section>
-      </body>
+      </Flex>
     );
   }
 }
