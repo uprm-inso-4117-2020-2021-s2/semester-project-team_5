@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "description": "TrackPack",
-    "version": "1.0.0",
+    "version": "v1",
     "title": "TrackPack Package Manager",
     "contact": {
       "email": "track.pack4117@gmail.com"
@@ -12,14 +12,66 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   },
+  "tags": [
+    {
+      "name": "User Request",
+      "description": "API requests pertaining the user."
+    }
+  ],
+  "paths": {
+    "/users": {
+      "get": {
+        "tags": [
+          "User Request"
+        ],
+        "summary": "Returns all users in database.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref":"#/components/schemas/user"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "User Request"
+        ],
+        "summary": "Creates a user.",
+        "requestBody": {
+          "description": "User Post Request",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref":"#/components/schemas/user"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/userResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    }
+  },
   "components": {
     "schemas": {
       "user": {
         "type": "object",
         "properties": {
-          "uuid": {
-            "type": "string"
-          },
           "username":{
             "type": "string"
           },
@@ -28,6 +80,17 @@
           },
           "email": {
             "type": "string"
+          }
+        }
+      },
+      "userResponse":{
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "string"
+          },
+          "message":{
+            "type":"string"
           }
         }
       },
