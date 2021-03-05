@@ -29,3 +29,4 @@ zope.interface==5.2.0
 passlib
 flask-jwt-extended
 simplejson
+flask-swagger-ui==3.36.0

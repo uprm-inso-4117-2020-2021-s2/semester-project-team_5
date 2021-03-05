@@ -4,9 +4,20 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from flask_jwt_extended import JWTManager
 from enum import IntEnum
+from flask_swagger_ui import get_swaggerui_blueprint
+
+# Swagger
+SWAGGER_URL = "/swagger"
+API_URL = "/static/swagger.json"
+SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        "app_name": "TrackPack Pack Manager"
+    }
+)
 
 #AWS database credentials
-
 db_url = 'database-1.ct1iwiyel0uh.us-east-2.rds.amazonaws.com:5432'
 db_name = 'postgres'
 db_username = 'postgres'
@@ -15,7 +26,6 @@ db_password = 'letmein123'
 PROD_DB = f'postgresql://{db_username}:{db_password}@{db_url}/{db_name}'
 
 #App instance
-
 app = Flask("trackpack")
 app.config['CORS_HEADER'] = 'Content-type'
 app.config['SQLALCHEMY_DATABASE_URI'] = PROD_DB
@@ -28,6 +38,7 @@ app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_USERNAME'] = 'track.pack4117@gmail.com'
 app.config['MAIL_PASSWORD'] = 'tK4eNbPNqSh27QgUPAl1UQMHW0pPo9RbYQrQJykA'
 mail = Mail(app)
+app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 
 db = SQLAlchemy(app)
 jwt = JWTManager(app)

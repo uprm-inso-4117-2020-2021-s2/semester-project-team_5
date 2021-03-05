@@ -1,0 +1,76 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "TrackPack",
+    "version": "1.0.0",
+    "title": "TrackPack Package Manager",
+    "contact": {
+      "email": "track.pack4117@gmail.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "components": {
+    "schemas": {
+      "user": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string"
+          },
+          "username":{
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "category": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          }
+        }
+      },
+      "package": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "carrier": {
+            "type": "string"
+          },
+          "tracking_number": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "creation_date": {
+            "type": "date"
+          },
+          "package_status": {
+            "type": "string"
+          },
+          "UUID": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
