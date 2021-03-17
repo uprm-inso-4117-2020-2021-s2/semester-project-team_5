@@ -11,7 +11,7 @@ const Topnav = () => {
   <Navbar.Collapse id="responsive-navbar-nav">
     <Nav className="mr-auto">
       <Nav.Link>Tracking</Nav.Link>
-      <Nav.Link>Sign in</Nav.Link>
+      <Nav.Link as={Link} exact to="/signin">Sign in</Nav.Link>
       <Nav.Link as={Link} exact to="/signup">Sign up</Nav.Link>
     </Nav>
   </Navbar.Collapse>

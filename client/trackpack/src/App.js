@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 import Topnav from "./components/Topnav";
 import Signup from "./views/signup/signup";
+import Signin from "./views/signin/signin";
 import Homepage from "./components/homepage";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -20,6 +21,9 @@ function App() {
             </Route>
             <Route path="/signup">
               <Signup/>
+            </Route>
+            <Route path="/signin">
+              <Signin/>
             </Route>
           </Switch>
           {/* <Footer/> */}
