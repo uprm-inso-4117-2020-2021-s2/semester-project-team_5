@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import Topnav from "./Topnav";
 import "./homepage.css";
-import { Flex, Box } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
+import people from "../assets/happy people.png";
 class Homepage extends Component {
   state = {
     about: "",
@@ -21,15 +21,18 @@ class Homepage extends Component {
       >
         <div>
           <img
-            className="homeImage"
-            src="https://i.imgur.com/cwO8vQg.png"
+            id="homeImage"
+            src={people}
             alt=""
           />
         </div>
-        <div className="aboutBox">
+
+        <div class="about-container">
           <h2>About us</h2>
-          <p className="aboutUs">TEXT</p>
-          <div className="bottomBar"></div>
+            <div className="aboutUs">  
+            <p>TEXT</p>
+            <div className="bottomBar"></div>
+            </div>
         </div>
       </Flex>
     );
