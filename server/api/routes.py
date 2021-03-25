@@ -1,7 +1,6 @@
-from flask import request, url_for, redirect
-from flask_mail import Message
+from flask import request, redirect
 from user.handler import UserHandler
-from api import app, mail
+from api import app, HttpStatus
 
 @app.route('/', methods=['GET'])
 def hello_world():
@@ -29,9 +28,8 @@ def activation_request():
     if(request.method == "POST"):
         json = request.json
         user = UserHandler.getUserByEmail(json['email'])
-        if user[1] == 200:
-            send_activation_email(json['email'])
-            return UserHandler.sentEmail()
+        if user[1] == HttpStatus.OK:
+            return UserHandler.sendActivationEmail(json['email'])
 
 @app.route('/account-activation/<token>', methods=['GET', 'POST'])
 def activation_token(token):
@@ -39,18 +37,6 @@ def activation_token(token):
     UserHandler.activateAccount(token)
     return redirect('http://localhost:3000')
 
-def send_activation_email(email):
-    token = UserHandler.get_user_token(email)
-
-    msg = Message('Email Confirmation Code',
-                    sender='track.pack4117@gmail.com',
-                    recipients=[email])
-    msg.body = f'''To activate your account visit the following link:
-{url_for('activation_token', token=token, _external=True)}
-If you did not make this account then simply ignore this email.
-'''
-    mail.send(msg)
-
 @app.route('/login', methods = ['POST'])
 def sign_in():
-   return UserHandler.sign_in(request.json)
+   return UserHandler.signIn(request.json)
