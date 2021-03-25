@@ -1,5 +1,5 @@
 /*
-signup.js (component for registration)
+signin.js (component for sign in)
 */
 
 import React, { Component } from "react";
@@ -11,37 +11,35 @@ import {
   FormLabel,
   Input,
 } from "@chakra-ui/react";
-import { signUp } from "./signup-service";
+import { signIn } from "./signin-service";
 
 import { Button } from "@chakra-ui/button";
-
-import "./signup.css";
 import { Link, withRouter } from "react-router-dom";
 
-class Signup extends Component {
+// import "./signup.css";
+
+class Signin extends Component {
   constructor() {
     super();
 
-    this.onSignUp = this.onSignUp.bind(this);
+    this.onSignIn = this.onSignIn.bind(this);
 
     this.state = {
-      name: "",
       email: "",
       password: "",
       errors: {},
     };
   }
 
-  onSignUp = (e) => {
+  onSignIn = (e) => {
     e.preventDefault();
 
     const newUser = {
-      name: this.state.name,
       email: this.state.email,
       password: this.state.password,
     };
 
-    signUp(newUser); //Register user
+    signIn(newUser); //Sign in user
     this.props.history.push("/"); //Redirect to homepage
   };
 
@@ -61,24 +59,10 @@ class Signup extends Component {
       >
         <Box className="form" p={2}>
           <Box textAlign="center">
-            <Heading color="white">
-              Account
-              <br />
-              Creation
-            </Heading>
+            <Heading color="white">Sign In</Heading>
           </Box>
           <Box my={4} textAlign="center">
-            <form onSubmit={this.onSignUp}>
-              <FormControl className="form-item">
-                <FormLabel color="white">Name</FormLabel>
-                <Input
-                  id="name"
-                  onChange={this.onChange}
-                  value={this.state.name}
-                  type="text"
-                  className="form-input"
-                />
-              </FormControl>
+            <form onSubmit={this.onSignIn}>
               <FormControl className="form-item">
                 <FormLabel color="white">E-mail</FormLabel>
                 <Input
@@ -110,16 +94,29 @@ class Signup extends Component {
             </form>
           </Box>
         </Box>
-        <Flex flexDirection="column">
-          <a>Already have an account?</a>
-          <Button
-            as={Link} exact to="/signin"
+        <Flex paddingTop="20px" width="25vh" flexDirection="row" justifyContent="space-between">
+          <a>No account?</a>
+          <a>Or continue as</a>
+        </Flex>
+        <Flex width="25vh" flexDirection="row" justifyContent="space-between">
+        <Button
+            as={Link} exact to="/signup"
             borderRadius="20px"
             color="white"
             backgroundColor="#2C148C"
             marginBottom="20px"
           >
-            Sign-In
+            Register
+          </Button>
+          <Button
+          as={Link} exact to="/"
+            borderRadius="20px"
+            color="white"
+            backgroundColor="#2C148C"
+            marginBottom="20px"
+            marginRight="12px"
+          >
+            Guest
           </Button>
         </Flex>
       </Flex>
@@ -127,4 +124,4 @@ class Signup extends Component {
   }
 }
 
-export default withRouter(Signup);
+export default withRouter(Signin);
