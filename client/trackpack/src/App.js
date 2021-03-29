@@ -6,33 +6,49 @@ import { ChakraProvider } from "@chakra-ui/react";
 import Topnav from "./components/Topnav";
 import Signup from "./views/signup/signup";
 import Signin from "./views/signin/signin";
-import Homepage from "./components/homepage";
+import Package from "./components/package";
+import Packages from "./views/tracking/packages";
+import Homepage from "./views/home/homepage";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
-  return (  
+  return (
     <ChakraProvider>
-   <Router>
-      <div>
-          <Topnav/>
+      <Router>
+        <div>
+          <Topnav />
           <Switch>
             <Route exact path="/">
-              <Homepage title="Homepage"/>
+              <Homepage title="Homepage" />
             </Route>
             <Route path="/signup">
-              <Signup/>
+              <Signup />
             </Route>
             <Route path="/signin">
-              <Signin/>
+              <Signin />
+            </Route>
+            <Route path="/packages">
+              <Packages>
+                <Package
+                  name="Huevos"
+                  deliveryDate="03/09/2021"
+                  status="In transit"
+                  category="Unlisted"
+                />
+                <Package
+                  name="Eggs"
+                  deliveryDate="04/05/2022"
+                  status="Arriving Tomorrow"
+                  category="Electronics"
+                />
+              </Packages>
             </Route>
           </Switch>
           {/* <Footer/> */}
-      </div>
-    </Router>
+        </div>
+      </Router>
     </ChakraProvider>
-
   );
 }
- 
-export default App;
 
+export default App;
