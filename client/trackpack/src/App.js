@@ -9,6 +9,7 @@ import Signin from "./views/signin/signin";
 import Package from "./components/package";
 import Packages from "./views/tracking/packages";
 import Homepage from "./views/home/homepage";
+import TrackPackage from "./views/track/trackPackage";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
@@ -42,6 +43,9 @@ function App() {
                   category="Electronics"
                 />
               </Packages>
+            </Route>
+            <Route path="/trackPackage">
+              <TrackPackage />
             </Route>
           </Switch>
           {/* <Footer/> */}

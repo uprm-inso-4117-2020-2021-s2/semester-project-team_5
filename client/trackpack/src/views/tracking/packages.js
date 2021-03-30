@@ -16,7 +16,7 @@ class Packages extends Component {
             <Link to="/signin">Order History</Link>
           </li>
           <li>
-            <Link to="/signin">Current Order</Link>
+            <Link to="/trackPackage">Current Order</Link>
           </li>
           <div className="searchContainer">
             <i className="magGlassIcon">
