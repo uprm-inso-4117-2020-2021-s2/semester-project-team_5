@@ -29,3 +29,4 @@ zope.interface==5.2.0
 passlib
 flask-jwt-extended
 simplejson
+Flask-Testing
