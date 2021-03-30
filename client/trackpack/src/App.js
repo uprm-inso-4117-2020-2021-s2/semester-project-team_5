@@ -10,6 +10,7 @@ import Package from "./components/package";
 import Packages from "./views/tracking/packages";
 import Homepage from "./views/home/homepage";
 import TrackPackage from "./views/track/trackPackage";
+import OrderInfo from "./views/orderInformation/orderInfo";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
@@ -29,26 +30,15 @@ function App() {
               <Signin />
             </Route>
             <Route path="/packages">
-              <Packages>
-                <Package
-                  name="Huevos"
-                  deliveryDate="03/09/2021"
-                  status="In transit"
-                  category="Unlisted"
-                />
-                <Package
-                  name="Eggs"
-                  deliveryDate="04/05/2022"
-                  status="Arriving Tomorrow"
-                  category="Electronics"
-                />
-              </Packages>
+              <Packages />
             </Route>
             <Route path="/trackPackage">
               <TrackPackage />
             </Route>
+            <Route path="/orderInformation">
+              <OrderInfo />
+            </Route>
           </Switch>
-          {/* <Footer/> */}
         </div>
       </Router>
     </ChakraProvider>
