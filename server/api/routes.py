@@ -1,5 +1,8 @@
 from flask import request, redirect
 from user.handler import UserHandler
+from category.handler import CategoryHandler
+from package.handler import PackageHandler
+from package_status.handler import PackageStatusHandler
 from api import app, HttpStatus
 
 @app.route('/', methods=['GET'])
@@ -13,15 +16,40 @@ def get_all_users_or_create():
     elif request.method == 'POST':
         return UserHandler.createUser(request.json)
 
-@app.route("/users/username/<string:username>", methods=['GET'])
-def get__user_by_username(username):
+@app.route("/categories", methods=['GET', 'POST'])
+def get_all_categories_or_create():
     if request.method == 'GET':
-        return UserHandler.getUserByUsername(username)
+        return CategoryHandler.getAllCategories()
+    elif request.method == 'POST':
+        return CategoryHandler.createCategory(request.json)
 
-@app.route("/users/email/<string:email>", methods=['GET'])
-def get__user_by_email(email):
+@app.route("/users/<string:user_id>/categories", methods=['GET'])
+def get_categories_by_user_id(user_id):
     if request.method == 'GET':
-        return UserHandler.getUserByEmail(email)
+        return CategoryHandler.getCategoriesByUserId(user_id)
+
+@app.route("/packages", methods=['GET', 'POST', 'DELETE'])
+def get_all_packages_or_create():
+    if request.method == 'GET':
+        return PackageHandler.getAllPackages()
+    elif request.method == 'POST':
+        return PackageHandler.createPackage(request.json)
+    elif request.method == 'DELETE':
+        return PackageHandler.deletePackage(request.json)
+
+@app.route("/packages-statuses", methods=['GET', 'POST', 'DELETE'])
+def get_all_statuses_or_create():
+    if request.method == 'GET':
+        return PackageStatusHandler.getAllStatuses()
+    elif request.method == 'POST':
+        return PackageStatusHandler.createStatus(request.json)
+    elif request.method == 'DELETE':
+        return PackageStatusHandler.deleteStatus(request.json)
+
+@app.route("/packages/<int:package_id>/packages-statuses", methods=['GET'])
+def get_statuses_by_package_id(package_id):
+    if request.method == 'GET':
+        return PackageStatusHandler.getStatusesByPackageId(package_id)
 
 @app.route('/account-activation', methods=['POST'])
 def activation_request():

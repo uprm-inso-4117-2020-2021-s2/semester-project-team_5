@@ -34,23 +34,7 @@ class UserHandler:
             }
             return jsonify(result), HttpStatus.OK
         except Exception as e:
-            return jsonify(reason="Server error", error=e.__str__()), HttpStatus.INTERNAL_SERVER_ERROR
-
-    @staticmethod
-    def getUserByEmail(email):
-        try:
-            user = User.getUserByEmail(email)
-            if user:
-                user_dict = to_dict(user)
-                result = {
-                    "message": "Success!",
-                    "user": user_dict
-                }
-                return jsonify(result), HttpStatus.OK
-            else:
-                return jsonify(reason="User does not exist."), HttpStatus.NOT_FOUND
-        except Exception as e:
-            return jsonify(reason="Server error", error=e.__str__()), HttpStatus.INTERNAL_SERVER_ERROR      
+            return jsonify(reason="Server error", error=e.__str__()), HttpStatus.INTERNAL_SERVER_ERROR     
 
     @staticmethod
     def createUser(json):
@@ -58,8 +42,15 @@ class UserHandler:
         if valid_params:
             try:
                 email_exists = User.getUserByEmail(json['email'])
-                if email_exists:
+                username_exists = User.getUserByUsername(json['username'])
+
+                if username_exists and email_exists:
+                    return jsonify(message="Username and email already taken. Please use another one."), HttpStatus.BAD_REQUEST
+                elif username_exists:
+                    return jsonify(message="Username already taken. Please use another one."), HttpStatus.BAD_REQUEST
+                elif email_exists:
                     return jsonify(message="Email already taken. Please use another one."), HttpStatus.BAD_REQUEST
+
                 valid_params['password'] = sha256.hash(valid_params['password'])
                 created_user = User(**valid_params).create()
                 user_dict = to_dict(created_user)
@@ -67,10 +58,12 @@ class UserHandler:
                     "message": "Success!",
                     "user": user_dict,
                 }
+
                 #sends an activation email to the user
                 UserHandler.sendActivationEmail(json['email'])
                 #returns created user, however, if send activation email fails, user must request another email
                 return jsonify(result), HttpStatus.CREATED
+
             except Exception as err:
                 return jsonify(message="Server error!", error=err.__str__()), HttpStatus.INTERNAL_SERVER_ERROR
         else:
@@ -93,22 +86,6 @@ class UserHandler:
         return s.dumps({'email': email}).decode('utf-8')
 
     @staticmethod
-    def getUserByUsername(username):
-        try:
-            user = User.getUserByUsername(username)
-            if user:
-                user_dict = to_dict(user)
-                result = {
-                    "message": "Success!",
-                    "user": user_dict
-                }
-                return jsonify(result), HttpStatus.OK
-            else:
-                return jsonify(reason="User does not exist."), HttpStatus.NOT_FOUND
-        except Exception as e:
-            return jsonify(reason="Server error", error=e.__str__()), HttpStatus.INTERNAL_SERVER_ERROR
-
-    @staticmethod
     def verifyUserToken(token):
         s = Serializer(app.config['SECRET_KEY'])
         try:
@@ -128,7 +105,7 @@ class UserHandler:
                 access_token = create_access_token(identity = user.user_id)
                 return jsonify(access_token = access_token), HttpStatus.OK
             else:
-                return jsonify(Error = 'email or password incorrect'), HttpStatus.NOT_FOUND
+                return jsonify(Error = 'Email or password is incorrect'), HttpStatus.NOT_FOUND
         return jsonify(Error = 'Malformed body'), HttpStatus.BAD_REQUEST
 
     @staticmethod
@@ -140,7 +117,7 @@ class UserHandler:
                         recipients=[email])
         msg.body = f'''To activate your account visit the following link:
     {url_for('activation_token', token=token, _external=True)}
-    If you did not make this account then simply ignore this email.
+    If you did not make this account, then simply ignore this email.
     '''
         mail.send(msg)
         return jsonify(status='Please check your email to verify it!'), HttpStatus.OK
