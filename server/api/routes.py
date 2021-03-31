@@ -1,7 +1,10 @@
 from flask import json, request, url_for, redirect, jsonify
 from flask_mail import Message
 from user.handler import UserHandler
-from api import app, mail
+from category.handler import CategoryHandler
+from package.handler import PackageHandler
+from package_status.handler import PackageStatusHandler
+from api import app, HttpStatus
 
 @app.route('/', methods=['GET'])
 def hello_world():
@@ -26,24 +29,48 @@ def get_all_users_or_create():
 
         return UserHandler.createUser(request.json)
 
-@app.route("/users/username/<string:username>", methods=['GET'])
-def get__user_by_username(username):
+@app.route("/categories", methods=['GET', 'POST'])
+def get_all_categories_or_create():
     if request.method == 'GET':
-        return UserHandler.getUserByUsername(username)
+        return CategoryHandler.getAllCategories()
+    elif request.method == 'POST':
+        return CategoryHandler.createCategory(request.json)
 
-@app.route("/users/email/<string:email>", methods=['GET'])
-def get__user_by_email(email):
+@app.route("/users/<string:user_id>/categories", methods=['GET'])
+def get_categories_by_user_id(user_id):
     if request.method == 'GET':
-        return UserHandler.getUserByEmail(email)
+        return CategoryHandler.getCategoriesByUserId(user_id)
+
+@app.route("/packages", methods=['GET', 'POST', 'DELETE'])
+def get_all_packages_or_create():
+    if request.method == 'GET':
+        return PackageHandler.getAllPackages()
+    elif request.method == 'POST':
+        return PackageHandler.createPackage(request.json)
+    elif request.method == 'DELETE':
+        return PackageHandler.deletePackage(request.json)
+
+@app.route("/packages-statuses", methods=['GET', 'POST', 'DELETE'])
+def get_all_statuses_or_create():
+    if request.method == 'GET':
+        return PackageStatusHandler.getAllStatuses()
+    elif request.method == 'POST':
+        return PackageStatusHandler.createStatus(request.json)
+    elif request.method == 'DELETE':
+        return PackageStatusHandler.deleteStatus(request.json)
+
+@app.route("/packages/<int:package_id>/packages-statuses", methods=['GET'])
+def get_statuses_by_package_id(package_id):
+    if request.method == 'GET':
+        return PackageStatusHandler.getStatusesByPackageId(package_id)
 
 @app.route('/account-activation', methods=['POST'])
 def activation_request():
     if(request.method == "POST"):
         json = request.json
         user = UserHandler.getUserByEmail(json['email'])
-        if user[1] == 200:
-            send_activation_email(json['email'])
-            return UserHandler.sentEmail()
+        if user[1] == HttpStatus.OK:
+            return UserHandler.sendActivationEmail(json['email'])
 
 @app.route('/account-activation/<token>', methods=['GET', 'POST'])
 def activation_token(token):
@@ -51,18 +78,6 @@ def activation_token(token):
     UserHandler.activateAccount(token)
     return redirect('http://localhost:3000')
 
-def send_activation_email(email):
-    token = UserHandler.get_user_token(email)
-
-    msg = Message('Email Confirmation Code',
-                    sender='track.pack4117@gmail.com',
-                    recipients=[email])
-    msg.body = f'''To activate your account visit the following link:
-{url_for('activation_token', token=token, _external=True)}
-If you did not make this account then simply ignore this email.
-'''
-    mail.send(msg)
-
 @app.route('/login', methods = ['POST'])
 def sign_in():
-   return UserHandler.sign_in(request.json)
+   return UserHandler.signIn(request.json)

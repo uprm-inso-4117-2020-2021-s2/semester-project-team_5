@@ -13,6 +13,7 @@ db_username = 'postgres'
 db_password = 'letmein123'
 
 PROD_DB = f'postgresql://{db_username}:{db_password}@{db_url}/{db_name}'
+DEV_DB = f'postgresql://postgres:password@localhost:5432/'
 
 #App instance
 
