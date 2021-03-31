@@ -1,6 +1,4 @@
-import logo from "./logo.svg";
 import "./App.css";
-
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 import Topnav from "./components/Topnav";

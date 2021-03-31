@@ -1,6 +1,6 @@
-import React from 'react'
-import logo from '../assets/logo.png'
-import './Topnav.css'
+import React from 'react';
+import logo from '../assets/logo.png';
+import './Topnav.css';
 import { Navbar, Nav, Card} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 
