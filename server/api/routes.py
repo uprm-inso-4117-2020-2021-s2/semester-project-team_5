@@ -1,4 +1,4 @@
-from flask import request, url_for, redirect
+from flask import json, request, url_for, redirect, jsonify
 from flask_mail import Message
 from user.handler import UserHandler
 from api import app, mail
@@ -12,6 +12,18 @@ def get_all_users_or_create():
     if request.method == 'GET':
         return UserHandler.getAllUsers()
     elif request.method == 'POST':
+        '''
+        This is only done for testing
+        Gatling sends a byte string 
+        So we need to decode it and load
+        as JSON.
+        '''
+        if request.data:
+            my_data = request.data
+            decoded_data = my_data.decode('utf8').replace("'",'"')
+            newly_decoded_data = json.loads(decoded_data)
+            return UserHandler.createUser(newly_decoded_data)
+
         return UserHandler.createUser(request.json)
 
 @app.route("/users/username/<string:username>", methods=['GET'])

@@ -104,5 +104,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.pyc
+#Virtual environments
+*.venv
+*.env
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,windows,macos,linux,git
