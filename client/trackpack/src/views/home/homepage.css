@@ -1,0 +1,68 @@
+@import url("https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap");
+.css-1dk29yy {
+  font-family: "Bubblegum Sans", cursive;
+  }
+
+#homeImage {
+  margin: 5vw;
+  width: 40vw;
+}
+
+.landPage {
+  display: flex;
+  justify-content: space-around;
+}
+
+.homeImage {
+  margin-top: 124px;
+  margin-left: 150px;
+  width: 658px;
+  height: 430px;
+}
+.aboutBox {
+  width: 750px;
+  height: 400px;
+  border-radius: 20px;
+  background-color: #2c148c;
+  margin-top: 150px;
+  position: relative;
+}
+
+.title {
+  position: absolute;
+  top: -40px;
+  text-align: center;
+  font-size: 35px;
+  width: 100%;
+  font-family: "Bubblegum Sans", cursive;
+}
+.description {
+  text-align: left;
+  color: white;
+  width: 750px;
+  height: 400px;
+  position: absolute;
+  font-size: 15px;
+  text-indent: 20px;
+  top: 30%;
+  left: 4px;
+}
+.bottomBar {
+  height: 30px;
+  width: 750px;
+  border-radius: 20px;
+  position: absolute;
+  bottom: 0px;
+  background-color: #f37602;
+}
+
+@media screen and (max-width: 991px) {
+  .css-1dk29yy { flex-direction: column !important; }
+  #homeImage { width: 80vw; }
+  .about-container{font-size: 6.5vw; }
+  .aboutUs {
+    width: 80vw;
+    height: 80vw;
+    font-size: 5vw;
+  }
+}
