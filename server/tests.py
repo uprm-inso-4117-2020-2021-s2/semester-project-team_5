@@ -1,11 +1,12 @@
 import unittest 
+from unittest.mock import Mock
 from flask_testing import TestCase 
 import json
 
-from api import app, db, routes
+from api import app, db, routes, verify_parameters, to_dict
 from user.dao import User
 
-class MyTest(TestCase):
+class TestClient(TestCase):
     def create_app(self):
         app.config['TESTING'] = True
         app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://trackpack:@localhost/trackpack_testing"
@@ -19,21 +20,54 @@ class MyTest(TestCase):
         db.session.remove()
         db.drop_all()
 
-class ApiTest(MyTest):
+class UtilsTest(TestClient):
+    def test_verify_parameters(self):
+        params = {'email', 'username', 'password'}
+        data = {'email':'testemail', 'username':'tester', 'password':'testing'}
+        valid_params = verify_parameters(data, params)
+        assert valid_params == data
+
+        params = {'email', 'username', 'password'}
+        data = {'username':'tester', 'password':'testing'}
+        valid_params = verify_parameters(data, params)
+        assert valid_params == None
+
+class ApiTest(TestClient):
     def test_creat_user(self):
         response = self.client.post('/users', 
                                     data=json.dumps(dict(email='test', password='test', username='test')),
                                     content_type='application/json')
 
-        self.assertEquals(response.json['message'],'Success!')
-        self.assertEquals(response.json['user'], dict(active=False,email='test', password=response.json['user']['password'], username='test', user_id=response.json['user']['user_id']))
+        assert response.json['message'] == 'Success!'
+        assert response.json['user']['active'] == False
+        assert response.json['user']['email'] == 'test'
+        assert response.json['user']['username'] == 'test'
+
+    def test_fail_create_user(self):
+        data = {'email':'test', 'password':'test', 'username': 'test'}
+        user = User(**data).create()
+
+        response = self.client.post('/users', 
+                                    data=json.dumps(dict(email='test', password='test', username='test')),
+                                    content_type='application/json')
+        assert response.json == {'message':'Email already taken. Please use another one.'}
+
+        response = self.client.post('/users', 
+                                    data=json.dumps(dict(password='test2', username='test2')),
+                                    content_type='application/json')
+        assert response.json == {'message':'Bad Request!'}
 
     def test_get_all_users(self):
         data = {'email':'test', 'password':'test', 'username': 'test'}
         user = User(**data).create()
 
         response = self.client.get("/users")
-        self.assertEquals(response.json, dict(message='Success!', users=[dict(active=False,email='test',password='test',user_id=response.json['users'][0]['user_id'],username='test')]) )
+        response_user = response.json['users'][0]
+
+        assert response.json['message'] == 'Success!'
+        assert response_user['active'] == False
+        assert response_user['email'] == 'test'
+        assert response_user['username'] == 'test'
 
     def test_get_user_by_username(self):
         data1 = {'email':'test1', 'password':'test', 'username': 'user1'}
@@ -43,12 +77,20 @@ class ApiTest(MyTest):
         user2 = User(**data2).create()
 
         response = self.client.get('/users/username/user1')
-        self.assertEquals(response.json['message'],'Success!')
-        self.assertEquals(response.json['user'], dict(active=False,email='test1', password=response.json['user']['password'], username='user1', user_id=response.json['user']['user_id']))
+        assert response.json['message'] == 'Success!'
+        assert response.json['user']['active'] == False
+        assert response.json['user']['email'] == 'test1'
+        assert response.json['user']['username'] == 'user1'
 
         response = self.client.get('/users/username/user2')
-        self.assertEquals(response.json['message'],'Success!')
-        self.assertEquals(response.json['user'], dict(active=False,email='test2', password=response.json['user']['password'], username='user2', user_id=response.json['user']['user_id']))
+        assert response.json['message'] == 'Success!'
+        assert response.json['user']['active'] == False
+        assert response.json['user']['email'] == 'test2'
+        assert response.json['user']['username'] == 'user2'
+
+    def test_fail_user_by_username(self):
+        response = self.client.get('/users/username/user1')
+        assert response.json == {'reason':'User does not exist.'}
 
     def test_get_user_by_email(self):
         data1 = {'email':'test1', 'password':'test', 'username': 'user1'}
@@ -58,12 +100,21 @@ class ApiTest(MyTest):
         user2 = User(**data2).create()
 
         response = self.client.get('/users/email/test1')
-        self.assertEquals(response.json['message'],'Success!')
-        self.assertEquals(response.json['user'], dict(active=False,email='test1', password=response.json['user']['password'], username='user1', user_id=response.json['user']['user_id']))
+        assert response.json['message'] == 'Success!'
+        assert response.json['user']['active'] == False
+        assert response.json['user']['email'] == 'test1'
+        assert response.json['user']['username'] == 'user1'
 
         response = self.client.get('/users/email/test2')
-        self.assertEquals(response.json['message'],'Success!')
-        self.assertEquals(response.json['user'], dict(active=False,email='test2', password=response.json['user']['password'], username='user2', user_id=response.json['user']['user_id']))
+        assert response.json['message'] == 'Success!'
+        assert response.json['user']['active'] == False
+        assert response.json['user']['email'] == 'test2'
+        assert response.json['user']['username'] == 'user2'
+
+    def test_fail_get_user_by_email(self):
+        response = self.client.get('/users/email/test1')
+        assert response.json == {'reason':'User does not exist.'}
+
 
     def test_login(self):
         self.client.post('/users', 
@@ -74,8 +125,22 @@ class ApiTest(MyTest):
                                     data=json.dumps(dict(email='test',password='test')),
                                     content_type='application/json')
 
-        self.assertEquals(response.json, dict(access_token=response.json['access_token']))
+        assert response.json == dict(access_token=response.json['access_token'])
 
+    def test_fail_login(self):
+        self.client.post('/users', 
+                        data=json.dumps(dict(email='test', password='test', username='test')), 
+                        content_type='application/json')
+
+        response = self.client.post('/login',
+                                    data=json.dumps(dict(email='bad_email',password='bad_password')),
+                                    content_type='application/json')
+        assert response.json == {'Error':'email or password incorrect'}
+
+        response = self.client.post('/login',
+                                    data=json.dumps(dict(password='bad_password')),
+                                    content_type='application/json')
+        assert response.json == {'Error':'Malformed body'}
 
 if __name__ == '__main__':
     unittest.main()
