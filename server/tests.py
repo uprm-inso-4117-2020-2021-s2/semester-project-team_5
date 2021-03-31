@@ -32,6 +32,44 @@ class UtilsTest(TestClient):
         valid_params = verify_parameters(data, params)
         assert valid_params == None
 
+class UserDAOTest(TestClient):
+    def test_create_user(self):
+        data = {'email':'test', 'password':'test', 'username': 'test'}
+        user = User(**data).create()
+        assert user.username == 'test'
+        assert user.email == 'test'
+
+    def test_get_all_users(self):
+        data1 = {'email':'test', 'password':'test', 'username': 'test'}
+        user1 = User(**data1).create()
+        data2 = {'email':'test2', 'password':'test2', 'username': 'test2'}
+        user2 = User(**data2).create()
+        data3 = {'email':'test3', 'password':'test3', 'username': 'test3'}
+        user3 = User(**data3).create()
+        users = User.getAllUsers()
+        assert len(users) == 3
+        assert users[0] == user1
+        assert users[1] == user2
+        assert users[2] == user3
+
+    def test_get_user_by_id(self):
+        data = {'email':'test', 'password':'test', 'username': 'test'}
+        user = User(**data).create()
+        result = User.getUserById(user.user_id)
+        assert user == result
+
+    def test_get_by_email(self):
+        data = {'email':'test', 'password':'test', 'username': 'test'}
+        user = User(**data).create()
+        result = User.getUserByEmail(user.email)
+        assert user == result
+
+    def test_get_user_by_username(self):
+        data = {'email':'test', 'password':'test', 'username': 'test'}
+        user = User(**data).create()
+        result = User.getUserByUsername(user.username)
+        assert user == result
+
 class ApiTest(TestClient):
     def test_creat_user(self):
         response = self.client.post('/users', 
