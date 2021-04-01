@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./homepage.css";
-import { Flex, Box } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
+import people from "../../assets/happy people.png";
 class Homepage extends Component {
   state = {
     about: "",
@@ -11,16 +12,24 @@ class Homepage extends Component {
   }
   render() {
     return (
-      <div className="landPage">
-        <img
-          className="homeImage"
-          src="https://i.imgur.com/cwO8vQg.png"
-          alt=""
-        />
-        <div className="aboutBox">
-          <span className="title"> ABOUT US</span>
-          <p className="description">
-            {" "}
+      <Flex
+        width="full"
+        align="center"
+        justifyContent="space-between"
+        flexDirection="row"
+        flexWrap="wrap"
+      >
+        <div>
+          <img
+            id="homeImage"
+            src={people}
+            alt=""
+          />
+        </div>
+
+        <div class="about-container">
+          <h2>About us</h2>
+            <div className="aboutUs">  
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque a
             arcu sem. Suspendisse potenti. Lorem ipsum dolor sit amet,
             consectetur adipiscing elit. Mauris ut felis mattis, tempus libero
@@ -31,10 +40,10 @@ class Homepage extends Component {
             vulputate auctor sapien sit amet aliquet. Morbi elit tortor,
             facilisis non arcu ac, tristique commodo metus. Nullam vestibulum
             eget purus vestibulum ultricies.
-          </p>
-          <div className="bottomBar"></div>
+            <div className="bottomBar"></div>
+            </div>
         </div>
-      </div>
+      </Flex>
     );
   }
 }
