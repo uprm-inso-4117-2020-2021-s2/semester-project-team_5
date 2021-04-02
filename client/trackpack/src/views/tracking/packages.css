@@ -1,0 +1,67 @@
+.orderContainer {
+  border-radius: 45px;
+  background-color: #919191;
+  min-height: 700px;
+  width: 1000px;
+  position: relative;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 100px;
+}
+
+.options {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  flex-direction: row;
+  width: 700px;
+}
+
+.line {
+  border-bottom: 1px solid #000; /* whichever color you prefer */
+  width: 1000px;
+  margin-bottom: 15px;
+}
+.htext {
+  position: absolute;
+  top: 80px;
+  left: 80px;
+  font-size: 35px;
+}
+
+p {
+  position: absolute;
+  top: -30px;
+  left: 40px;
+  color: black;
+}
+
+.searchBar {
+  border: 0.5px solid black;
+  border-radius: 45px;
+  outline: none;
+  padding-left: 29px;
+  margin-bottom: 17px;
+}
+.searchContainer {
+  position: relative;
+  display: inline-block;
+}
+.magGlassIcon {
+  position: absolute;
+  left: 10px;
+  top: 5px;
+}
+.orderItems {
+  background-color: #2c148c;
+  height: 200px;
+}
+li {
+  display: inline;
+  margin-bottom: 20px;
+  margin-right: 30px;
+}
