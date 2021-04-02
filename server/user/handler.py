@@ -27,12 +27,15 @@ class UserHandler:
     def getUserById(uid):
         try:
             user = User.getUserById(uid)
-            user_dict = to_dict(user)
-            result = {
-                "message": "Success!",
-                "user": user_dict
-            }
-            return jsonify(result), HttpStatus.OK
+            if user:
+                user_dict = to_dict(user)
+                result = {
+                    "message": "Success!",
+                    "user": user_dict
+                }
+                return jsonify(result), HttpStatus.OK
+            else:
+                return jsonify(reason="User does not exist."), HttpStatus.NOT_FOUND
         except Exception as e:
             return jsonify(reason="Server error", error=e.__str__()), HttpStatus.INTERNAL_SERVER_ERROR     
 

@@ -28,6 +28,7 @@ app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_USERNAME'] = 'track.pack4117@gmail.com'
 app.config['MAIL_PASSWORD'] = 'tK4eNbPNqSh27QgUPAl1UQMHW0pPo9RbYQrQJykA'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 mail = Mail(app)
 
 db = SQLAlchemy(app)
@@ -40,9 +41,9 @@ def to_dict(obj):
     return res
 
 def verify_parameters(jsonP, params):
-    for param, value in jsonP.items():
-        if param in params and value is None:
-            return None
+    for param in params:
+      if param not in jsonP:
+          return None
     return jsonP
 
 class HttpStatus(IntEnum):
