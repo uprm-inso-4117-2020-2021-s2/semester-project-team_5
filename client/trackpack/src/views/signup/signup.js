@@ -26,6 +26,7 @@ import {
 } from "@chakra-ui/react";
 
 import "./signup.css";
+import AlertPopUp from "../../components/alertPopUp";
 import { Link, withRouter } from "react-router-dom";
 
 class Signup extends Component {
@@ -79,34 +80,15 @@ class Signup extends Component {
     let activationAlert;
     if (this.state.popup) {
       activationAlert = (
-        <AlertDialog
-          isOpen={this.state.popup}
-          leastDestructiveRef={this.okayRef}
-          onClose={!this.state.popup}
-        >
-          <AlertDialogOverlay>
-            <AlertDialogContent>
-              <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                Acount Created! Activation Required
-              </AlertDialogHeader>
-
-              <AlertDialogBody>
-                Check your email to activate your new account.
-              </AlertDialogBody>
-
-              <AlertDialogFooter>
-                <Button
-                  colorScheme="red"
-                  ref={this.okayRef}
-                  onClick={this.onClose}
-                  ml={3}
-                >
-                  Okay
-                </Button>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialogOverlay>
-        </AlertDialog>
+        <AlertPopUp
+        popup={this.state.popup}
+        reference={this.okayRef}
+        header="Acount Created! Activation Required"
+        body="Check your email to activate your new account."
+        buttonName="Okay"
+        buttonColor="red"
+        onClose={this.onClose}
+        />
       );
     }
     return (
