@@ -16,13 +16,7 @@ import {
 import { signUp, verifyData } from "./signup-service";
 
 import {
-  Button,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogBody,
-  AlertDialogHeader,
-  AlertDialogFooter,
+  Button
 } from "@chakra-ui/react";
 
 import "./signup.css";
@@ -52,7 +46,6 @@ class Signup extends Component {
       email: this.state.email,
       password: this.state.password,
     };
-
     this.setState({ errors: verifyData(newUser, this.state.errors) });
 
     if (Object.values(this.state.errors).length === 0) {
@@ -60,6 +53,10 @@ class Signup extends Component {
       if (res.message === "Success!") {
         this.setState({ popup: true });
       } else {
+        const newErr = {
+          message: res.message
+        }
+        this.setState({ errors : newErr })
       }
     }
   };
@@ -110,6 +107,16 @@ class Signup extends Component {
           <Box my={4} textAlign="center">
             <form onSubmit={this.onSignUp}>
               <FormControl className="form-item">
+                <Alert
+                  hidden={!errors.message}
+                  borderRadius="8px"
+                  fontSize="x-small"
+                  status="error"
+                  marginBottom="8px"
+                 >
+                 <AlertIcon />
+                 {errors.message}
+                 </Alert>
                 <FormLabel color="white">Name</FormLabel>
                 <Alert
                   hidden={!errors.username}
