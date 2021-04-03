@@ -10,6 +10,8 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Alert,
+  AlertIcon
 } from "@chakra-ui/react";
 import { signIn } from "./signin-service";
 
@@ -31,7 +33,7 @@ class Signin extends Component {
     };
   }
 
-  onSignIn = (e) => {
+  onSignIn = async (e) => {
     e.preventDefault();
 
     const newUser = {
@@ -39,8 +41,14 @@ class Signin extends Component {
       password: this.state.password,
     };
 
-    signIn(newUser); //Sign in user
-    this.props.history.push("/"); //Redirect to homepage
+    this.setState({ errors: {} }); //reset errors
+
+    let errors = await signIn(newUser); //Sign in user
+    if (errors) {
+      this.setState({ errors: errors });
+    } else {
+      this.props.history.push("/"); //Redirect to homepage
+    }
   };
 
   onChange = (e) => {
@@ -50,6 +58,7 @@ class Signin extends Component {
   };
 
   render() {
+    const { errors } = this.state;
     return (
       <Flex
         width="full"
@@ -64,6 +73,16 @@ class Signin extends Component {
           <Box my={4} textAlign="center">
             <form onSubmit={this.onSignIn}>
               <FormControl className="form-item">
+                <Alert
+                  hidden={!errors.Error}
+                  borderRadius="8px"
+                  fontSize="x-small"
+                  status="error"
+                  marginBottom="8px"
+                >
+                  <AlertIcon />
+                  {errors.Error}
+                </Alert>
                 <FormLabel color="white">E-mail</FormLabel>
                 <Input
                   id="email"
@@ -94,13 +113,20 @@ class Signin extends Component {
             </form>
           </Box>
         </Box>
-        <Flex paddingTop="20px" width="25vh" flexDirection="row" justifyContent="space-between">
+        <Flex
+          paddingTop="20px"
+          width="25vh"
+          flexDirection="row"
+          justifyContent="space-between"
+        >
           <a>No account?</a>
           <a>Or continue as</a>
         </Flex>
         <Flex width="25vh" flexDirection="row" justifyContent="space-between">
-        <Button
-            as={Link} exact to="/signup"
+          <Button
+            as={Link}
+            exact
+            to="/signup"
             borderRadius="20px"
             color="white"
             backgroundColor="#2C148C"
@@ -109,7 +135,9 @@ class Signin extends Component {
             Register
           </Button>
           <Button
-          as={Link} exact to="/"
+            as={Link}
+            exact
+            to="/"
             borderRadius="20px"
             color="white"
             backgroundColor="#2C148C"

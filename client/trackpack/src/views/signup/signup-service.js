@@ -5,7 +5,7 @@ const url = "http://localhost:5000";
 var mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 export const signUp = async (userData) => {
-    let errorMessage
+    let errorMessage;
     let response = await axios.
         post(url+'/users', userData)
         .catch((err) => {

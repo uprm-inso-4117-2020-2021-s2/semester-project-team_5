@@ -1,8 +1,20 @@
 import axios from "axios";
+import setAuthToken from "../../utils/setAuthToken";
 
-export const signIn = (userData) => {
-    /*Dummy post*/
-    // const response = axios.
-    //     post('route-goes-here', userData)
-    //     .catch(err => console.log(err));
+const url = "http://localhost:5000";
+
+export const signIn = async (userData) => {
+    let errorMessage;
+    await axios.
+        post(url+'/login', userData)
+        .then(res => {
+            console.log(res.data);
+            const {access_token} = res.data;
+            localStorage.setItem("jwtToken", access_token);
+            setAuthToken(access_token);
+        })
+        .catch((err) => {
+            errorMessage = err.response.data;
+        })
+    return errorMessage;
 }
