@@ -22,7 +22,7 @@ class PackageStatusHandler:
     @staticmethod
     def getStatusById(sid):
         try:
-            status = StatusHandler.getStatusById(sid)
+            status = PackageStatus.getStatusById(sid)
             status_dict = to_dict(status)
             result = {
                 "message": "Success!",
@@ -35,7 +35,7 @@ class PackageStatusHandler:
     @staticmethod
     def getStatusByCode(scode):
         try:
-            status = StatusHandler.getStatusByCode(scode)
+            status = PackageStatus.getStatusByCode(scode)
             status_dict = to_dict(status)
             result = {
                 "message": "Success!",
