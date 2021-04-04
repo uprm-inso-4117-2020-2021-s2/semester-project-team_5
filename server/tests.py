@@ -11,7 +11,7 @@ from package.dao import Package
 class TestClient(TestCase):
     def create_app(self):
         app.config['TESTING'] = True
-        app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://trackpack:@localhost/trackpack_testing"
+        app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://trackpack:trackpack_testing@localhost/trackpack_testing"
         db.init_app(app)
         return app
 
