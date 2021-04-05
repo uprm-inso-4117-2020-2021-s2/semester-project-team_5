@@ -1,20 +1,33 @@
 import React, { Component } from "react";
-import { Flex, Box, Container } from "@chakra-ui/react";
+import { Button, 
+         } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import "./packages.css";
 import { BsSearch } from "react-icons/bs";
 //import "../../components/package.css";
 import Package from "../../components/package";
+import AddPackageModal from "../../components/AddPackageModal/AddPackageModal";
+import AddCategoryModal from "../../components/AddCategoryModal/AddCategoryModal";
+
 
 class Packages extends Component {
-  state = {};
+  state = {
+    isAddingPackage: false,
+    isAddingCategory: false,
+  };
 
   render() {
     return (
       <div className="content">
         <div className="options">
+          {/* <li>
+            <Link to="/TrackPackage">Track a package</Link>
+          </li> */}
           <li>
-            <Link to="/TrackPackage">Order History</Link>
+            <Button onClick={() => this.setState({isAddingPackage: true})}> Track a Package </Button>
+          </li>
+          <li>
+            <Button onClick={() => this.setState({isAddingCategory: true})}> Create a Category</Button>
           </li>
           <li>
             <Link to="/orderInformation">Current Order</Link>
@@ -45,6 +58,14 @@ class Packages extends Component {
               deliveryDate="04/05/2022"
               status="Arriving Tomorrow"
               category="Electronics"
+            />
+            <AddPackageModal 
+              isAddingPackage= {this.state.isAddingPackage}
+              onClose = {(isAddingPackage) => this.setState({isAddingPackage})}
+            />
+            <AddCategoryModal
+              isAddingCategory= {this.state.isAddingCategory}
+              onClose = {(isAddingCategory) => this.setState({isAddingCategory})}
             />
           </div>
         </div>
