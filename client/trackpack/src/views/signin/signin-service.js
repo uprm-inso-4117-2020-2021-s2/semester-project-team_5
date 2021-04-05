@@ -8,7 +8,6 @@ export const signIn = async (userData) => {
     await axios.
         post(url+'/login', userData)
         .then(res => {
-            console.log(res.data);
             const {access_token} = res.data;
             localStorage.setItem("jwtToken", access_token);
             setAuthToken(access_token);
