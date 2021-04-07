@@ -16,16 +16,11 @@ import {
 import { signUp, verifyData } from "./signup-service";
 
 import {
-  Button,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogBody,
-  AlertDialogHeader,
-  AlertDialogFooter,
+  Button
 } from "@chakra-ui/react";
 
 import "./signup.css";
+import AlertPopUp from "../../components/alertPopUp";
 import { Link, withRouter } from "react-router-dom";
 
 class Signup extends Component {
@@ -51,7 +46,6 @@ class Signup extends Component {
       email: this.state.email,
       password: this.state.password,
     };
-
     this.setState({ errors: verifyData(newUser, this.state.errors) });
 
     if (Object.values(this.state.errors).length === 0) {
@@ -59,6 +53,10 @@ class Signup extends Component {
       if (res.message === "Success!") {
         this.setState({ popup: true });
       } else {
+        const newErr = {
+          message: res.message
+        }
+        this.setState({ errors : newErr })
       }
     }
   };
@@ -79,34 +77,15 @@ class Signup extends Component {
     let activationAlert;
     if (this.state.popup) {
       activationAlert = (
-        <AlertDialog
-          isOpen={this.state.popup}
-          leastDestructiveRef={this.okayRef}
-          onClose={!this.state.popup}
-        >
-          <AlertDialogOverlay>
-            <AlertDialogContent>
-              <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                Acount Created! Activation Required
-              </AlertDialogHeader>
-
-              <AlertDialogBody>
-                Check your email to activate your new account.
-              </AlertDialogBody>
-
-              <AlertDialogFooter>
-                <Button
-                  colorScheme="red"
-                  ref={this.okayRef}
-                  onClick={this.onClose}
-                  ml={3}
-                >
-                  Okay
-                </Button>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialogOverlay>
-        </AlertDialog>
+        <AlertPopUp
+        popup={this.state.popup}
+        reference={this.okayRef}
+        header="Acount Created! Activation Required"
+        body="Check your email to activate your new account."
+        buttonName="Okay"
+        buttonColor="red"
+        onClose={this.onClose}
+        />
       );
     }
     return (
@@ -128,6 +107,16 @@ class Signup extends Component {
           <Box my={4} textAlign="center">
             <form onSubmit={this.onSignUp}>
               <FormControl className="form-item">
+                <Alert
+                  hidden={!errors.message}
+                  borderRadius="8px"
+                  fontSize="x-small"
+                  status="error"
+                  marginBottom="8px"
+                 >
+                 <AlertIcon />
+                 {errors.message}
+                 </Alert>
                 <FormLabel color="white">Name</FormLabel>
                 <Alert
                   hidden={!errors.username}

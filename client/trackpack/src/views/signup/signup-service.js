@@ -5,9 +5,13 @@ const url = "http://localhost:5000";
 var mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 export const signUp = async (userData) => {
+    let errorMessage;
     let response = await axios.
         post(url+'/users', userData)
-    return response.data;
+        .catch((err) => {
+            errorMessage = err.response.data;
+        })
+    return errorMessage ? errorMessage : response.data;
 }
 
 export const verifyData = (userData, errors) => {
@@ -17,7 +21,7 @@ export const verifyData = (userData, errors) => {
 
     //Remove any empty K,V pair from errors
     for (const key in errors) {
-        if (errors[key] == "") {
+        if (errors[key] === "" || key === "message") {
             delete errors[key]
         }
     }
