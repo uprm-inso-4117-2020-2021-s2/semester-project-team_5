@@ -50,6 +50,10 @@ def get_all_packages_or_create():
     elif request.method == 'DELETE':
         return PackageHandler.deletePackage(request.json)
 
+@app.route("/users/categories/<int:category_id>/packages", methods=['GET'])
+def get_packages_by_category_id(category_id):
+    return PackageHandler.getPackagesByCategory(category_id)
+
 @app.route("/packages-statuses", methods=['GET', 'POST', 'DELETE'])
 def get_all_statuses_or_create():
     if request.method == 'GET':

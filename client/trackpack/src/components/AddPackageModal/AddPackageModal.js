@@ -45,7 +45,7 @@ const AddPackageModal = (props) => {
                     <Select placeholder="Select a category">
                       {/* in the future this will use the categories obtained from an API call. */ }
                     {values.map((value) => (
-                    <option>{value.option}</option>
+                    <option key={value.option}>{value.option}</option>
                     ))}
                     </Select>
                   </FormControl>
