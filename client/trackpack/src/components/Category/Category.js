@@ -1,12 +1,13 @@
-import { BsFillCaretDownFill, BsFillCaretUpFill } from "react-icons/bs";
 import React, { Component } from "react";
 import axios from "axios";
+import "./Category.css";
+import { BsFillCaretDownFill, BsFillCaretUpFill } from "react-icons/bs";
 
 class Category extends Component {
   constructor() {
     super();
     this.state = {
-      isHidden: true,
+      categoriesHidden: new Map(),
       packages: [],
       loading: true,
     };
@@ -22,7 +23,7 @@ class Category extends Component {
           let errorMessage;
           axios
             .get(
-              url + "/users/categories/" + category.category_id + "/packages"
+              url + "/categories/" + category.category_id + "/packages"
             )
             .then((res) => {
               let packages = this.state.packages;
@@ -38,28 +39,6 @@ class Category extends Component {
     }
     this.setState({loading: false})
   }
-
-  //  hideView = () => {
-  //     setHidden(!isHidden);
-  //     if (isHidden) {
-  //       setIcon(<BsFillCaretDownFill size="20px" />);
-  //     } else {
-  //       setIcon(<BsFillCaretUpFill size="20px" />);
-  //     }
-  //   };
-
-  // renderPackages(packages) {
-  //     packages.map( catPackage => {
-  //         return (
-  //             console.log(catPackage.name)
-  //             // <span> {catPackage.name}</span>
-  //         )
-  //     })
-  // }
-
-  // getPackages = async() => {
-
-  // }
 
   renderCategories(data) {
     if (data.categories) {
@@ -78,35 +57,53 @@ class Category extends Component {
         if (catPackages) {
           return (
             <React.Fragment>
-              <span key={category.id} style={{ display: "flex", fontSize: 40 }}>
-                {" "}
-                {category.name}
-              </span>
+                  <span key={category.category_id} style={{marginLeft: "6vw"}}>{category.name}</span>
+
+                  <button style={{marginLeft: "0.5vw"}} onClick={() =>{
+                    let map = this.state.categoriesHidden
+                    map[category.category_id] = !map[category.category_id]
+                    this.setState({categorysHidden: map})
+                    console.log(this.state.categorysHidden)
+                  }}>
+                      <span>
+                        {this.state.categoriesHidden[category.category_id]  && (<BsFillCaretDownFill size="20px" />) }
+                        {!this.state.categoriesHidden[category.category_id]  && (<BsFillCaretUpFill size="20px" />) }
+                      </span>
+                  </button>
+
               {catPackages ? this.renderPackages(catPackages) : ""}
             </React.Fragment>
           );
         }
       });
     }
-
-    //       <React.Fragment>
-    //         <span key={category.id} style={{ display: "flex", fontSize: 40 }}>
-    //           {category.name}{" "}
-    //         </span>
-    //         {packages ? this.renderPackages(packages) : ""}
-    //       </React.Fragment>
   }
   renderPackages(packagesArr) {
     return packagesArr.map((packages) => {
       return packages.packages.map((pack) => {
-        return <a>{pack.name} </a>;
+        return  <div className={this.state.categoriesHidden[pack.category_id] ? "packageNoInfo" : "packageInfo"}>
+        <div className="imageContainer">
+          <img
+            className="icon"
+            src="https://static.thenounproject.com/png/20088-200.png"
+            placeholder="stock image"
+          ></img>
+        </div>
+        <div className="itemName">
+          <span id="iName">{pack.name}</span>
+        </div>
+        <div className="itemInfo">
+          <span className="iInfo">Estimated delivery date: {}</span>
+          <span className="iInfo">Status: {}</span>
+        </div>
+      </div>;
       });
     });
   }
 
   render() {
     return (
-      <div>
+      <div style={{padding: "10vw"}}>
         {this.renderCategories(this.props.categories)}
       </div>
     );

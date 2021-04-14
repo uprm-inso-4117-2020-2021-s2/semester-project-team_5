@@ -1,10 +1,7 @@
 import React, { Component } from "react";
 import { Button, Flex } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
 import "./packages.css";
 import { BsSearch } from "react-icons/bs";
-//import "../../components/package.css";
-import Package from "../../components/package";
 import AddPackageModal from "../../components/AddPackageModal/AddPackageModal";
 import AddCategoryModal from "../../components/AddCategoryModal/AddCategoryModal";
 import Category from "../../components/Category/Category";
@@ -16,6 +13,7 @@ class Packages extends Component {
   state = {
     isAddingPackage: false,
     isAddingCategory: false,
+    isInCurrentOrders: true,
     categories: [],
     loading: true,
   };
@@ -47,10 +45,6 @@ class Packages extends Component {
       content = (
         <div className="content">
           <div className="options">
-            {/* <li>
-            <Link to="/TrackPackage">Track a package</Link>
-          </li> */}
-
             <li>
               <Button onClick={() => this.setState({ isAddingPackage: true })}>
                 {" "}
@@ -63,9 +57,14 @@ class Packages extends Component {
                 Create a Category
               </Button>
             </li>
+
             <li>
-              <Link to="/orderInformation">Current Order</Link>
+              <a className="link" onClick={() => this.setState({ isInCurrentOrders: true })}>Current Orders</a>
             </li>
+            <li>
+              <a className="link" onClick={() => this.setState({ isInCurrentOrders: false })}>Order History</a>
+            </li>
+
             <div className="searchContainer">
               <i className="magGlassIcon">
                 <BsSearch />
@@ -78,34 +77,23 @@ class Packages extends Component {
             </div>
           </div>
           <div className="line"></div>
-          <div className="orderContainer">
-            <h1 className="htext">Current Orders:</h1>
-            <div className="categories">
-              <Category
-                categories={this.state.categories}
-                packages={this.state.packages}
-              ></Category>
-            </div>
-          </div>
+
+        {this.state.isInCurrentOrders && (
+        <div className="orderContainer">
+        <h1 className="htext">Current Orders:</h1>
+            <Category categories={this.state.categories}>
+            </Category>
+        </div>)
+        }
+
+        {!this.state.isInCurrentOrders && (
+        <div className="orderContainer">
+        <h1 className="htext">Order History:</h1>
+            <Category categories={this.state.categories}>
+            </Category>
+        </div>)
+        }
           <div style={{ display: "flex" }} className="orderList">
-            {/* <Package
-              name="Huevos"
-              deliveryDate="03/09/2021"
-              status="In transit"
-              category="Unlisted"
-            />
-            <Package
-              name="Eggs"
-              deliveryDate="04/05/2022"
-              status="Arriving Tomorrow"
-              category="Electronics"
-            />
-            <Package
-              name="something"
-              deliveryDate= "04/05/2022"
-              status= "arriving tomorrow"
-              category="Electronics"
-              /> */}
             <AddPackageModal
               isAddingPackage={this.state.isAddingPackage}
               onClose={(isAddingPackage) => this.setState({ isAddingPackage })}

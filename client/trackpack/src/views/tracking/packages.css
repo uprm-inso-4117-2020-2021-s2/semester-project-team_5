@@ -1,8 +1,7 @@
 .orderContainer {
   border-radius: 45px;
   background-color: #919191;
-  min-height: 700px;
-  width: 1000px;
+  width: 65.5vw;
   position: relative;
   display: flex;
   justify-content: center;
@@ -15,18 +14,19 @@
   margin-bottom: 100px;
 }
 
+
 .options {
   margin-top: 40px;
   display: flex;
   justify-content: center;
   align-items: flex-end;
   flex-direction: row;
-  width: 700px;
+  width: 70vw;
 }
 
 .line {
   border-bottom: 1px solid #000; /* whichever color you prefer */
-  width: 1000px;
+  width: 66vw;
   margin-bottom: 15px;
 }
 .htext {
@@ -65,8 +65,13 @@ p {
 }
 li {
   display: inline;
-  margin-bottom: 20px;
-  margin-right: 30px;
+  margin: 0px 30px 20px 0px;
+}
+
+
+.link:hover{
+  color: orange;
+  cursor: pointer;
 }
 
 .orderList {
@@ -75,12 +80,4 @@ li {
   display: flex;
 }
 
-.categories {
-  display: flex;
-  justify-content: center;
-  height:100%;
-  width: 50%;
-  flex-direction: column;
-  background-color: aqua;
 
-}
