@@ -1,6 +1,7 @@
 from sqlalchemy.dialects.postgresql import UUID
 from api import db
 from user.dao import User
+from package.dao import Package
 import uuid
 
 class Category(db.Model):
@@ -34,6 +35,24 @@ class Category(db.Model):
     @staticmethod
     def getCategoriesByUserId(uid):
         return Category().query.filter_by(user_id=uid).all()
+
+    @staticmethod
+    def delete(cid):
+        category = Category.getCategoryById(cid)
+
+        if not category:
+            return None
+
+        #For all packages in a category change their category to a default one
+        packages = Package.getPackagesByCategory(cid)
+        for package in packages:
+            #Asuming that default category has id of 0
+            #TODO: Find default category id or create it
+            package.category_id = 0
+
+        db.session.delete(category)
+        db.session.commit()
+        return category
 
     def create(self):
         db.session.add(self)

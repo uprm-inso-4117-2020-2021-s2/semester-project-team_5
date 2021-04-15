@@ -66,3 +66,15 @@ class CategoryHandler:
                 return jsonify(message="Server error!", error=err.__str__()), HttpStatus.INTERNAL_SERVER_ERROR
         else:
             return jsonify(message="Bad Request!"), HttpStatus.BAD_REQUEST
+
+    @staticmethod
+    def deleteCategory(cid):
+        try:
+            deleted_categories = Category.delete(cid)
+            result = {
+                "message": "Success!",
+                "package": to_dict(deleted_categories)
+            }
+            return jsonify(result), HttpStatus.OK
+        except:
+            return jsonify(message="Bad Request!"), HttpStatus.BAD_REQUEST
