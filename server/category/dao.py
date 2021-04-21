@@ -37,18 +37,18 @@ class Category(db.Model):
         return Category().query.filter_by(user_id=uid).all()
 
     @staticmethod
-    def delete(cid):
-        category = Category.getCategoryById(cid)
+    def delete(category_id, user_id):
+        category = Category.getCategoryById(category_id)
 
         if not category:
             return None
 
         #For all packages in a category change their category to a default one
-        packages = Package.getPackagesByCategory(cid)
+        packages = Package.getPackagesByCategory(category_id)
+        #Assuming that unlisted category exists
+        unlisted_category = Category.getCategoryByUserIdAndName(user_id, 'unlisted')
         for package in packages:
-            #Asuming that default category has id of 0
-            #TODO: Find default category id or create it
-            package.category_id = 0
+            package.category_id = unlisted_category.category_id
 
         db.session.delete(category)
         db.session.commit()

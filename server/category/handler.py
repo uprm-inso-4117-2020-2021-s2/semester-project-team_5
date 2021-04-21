@@ -68,9 +68,9 @@ class CategoryHandler:
             return jsonify(message="Bad Request!"), HttpStatus.BAD_REQUEST
 
     @staticmethod
-    def deleteCategory(cid):
+    def deleteCategory(category_id, user_id):
         try:
-            deleted_categories = Category.delete(cid)
+            deleted_categories = Category.delete(category_id, user_id)
             result = {
                 "message": "Success!",
                 "package": to_dict(deleted_categories)
