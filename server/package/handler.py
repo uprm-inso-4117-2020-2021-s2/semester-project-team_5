@@ -97,7 +97,7 @@ class PackageHandler:
         valid_params = verify_parameters(json, Package.REQUIRED_PARAMETERS)
         if valid_params:
             try:
-                package_exists = Package.getPackageByTrackingNumberAndUserId(json['tracking_number'], json['user_id'])
+                package_exists = Category.getPackageByTrackingNumberAndUserId(json['tracking_number'], json['user_id'])
                 #does the user already has the package added in his account?
                 if package_exists:
                     return jsonify(message="The package you tried to create already exists in your account."), HttpStatus.BAD_REQUEST

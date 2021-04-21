@@ -223,6 +223,27 @@ class ApiTest(TestClient):
         assert category1['user_id'] == str(category.user_id)
         assert category1['name'] == category.name
 
+    def test_delete_category_by_user_id(self):
+        userData = {'email':'test', 'password':'test', 'username': 'test'}
+        user = User(**userData).create()
+
+        categoryData = {'user_id': user.user_id, 'name':'unlisted'}
+        unlisted_category = Category(**categoryData).create()
+
+        categoryData = {'user_id': user.user_id, 'name':'test_category'}
+        category = Category(**categoryData).create()
+
+        packageData = {'carrier':'usps', 'tracking_number':'212323123', 'name':'test', 'creation_date':'2021-02-01', 'category_id':category.category_id}
+        package = Package(**packageData).create()
+
+        response = self.client.delete(f'/users/{user.user_id}/categories/{category.category_id}')
+        deleted_category = response.json['category']
+        moved_packages = Package.getPackagesByCategory(unlisted_category.category_id)
+        assert response.json['message'] == 'Success!'
+        assert deleted_category['name'] == 'test_category'
+        assert moved_packages[0].carrier == 'usps'
+        assert moved_packages[0].name == 'test'
+
     def test_get_all_packages(self):
         userData = {'email':'test', 'password':'test', 'username': 'test'}
         user = User(**userData).create()

@@ -73,7 +73,7 @@ class CategoryHandler:
             deleted_categories = Category.delete(category_id, user_id)
             result = {
                 "message": "Success!",
-                "package": to_dict(deleted_categories)
+                "category": to_dict(deleted_categories)
             }
             return jsonify(result), HttpStatus.OK
         except:
