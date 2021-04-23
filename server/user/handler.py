@@ -67,7 +67,7 @@ class UserHandler:
                 UserHandler.sendActivationEmail(json['email'])
 
                 #Create unlisted category. Will serve as default category for unlisted packages
-                Category(**{created_user.user_id, 'unlisted'}).create()
+                Category(**{'user_id': created_user.user_id, 'name': 'unlisted'}).create()
 
                 #returns created user, however, if send activation email fails, user must request another email
                 return jsonify(result), HttpStatus.CREATED

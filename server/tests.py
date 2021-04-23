@@ -123,6 +123,9 @@ class CategoryDAOTest(TestClient):
         result_categories = Category.getCategoriesByUserId(user.user_id)
         assert result_categories[0] == category
 
+class PackageDAOTest(TestClient):
+    pass
+
 class ApiTest(TestClient):
 #     def test_create_user(self):
 #         response = self.client.post('/users', 
