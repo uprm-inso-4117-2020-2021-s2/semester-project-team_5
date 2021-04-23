@@ -17,8 +17,9 @@ class CategoryHandler:
             }
             return jsonify(result), HttpStatus.OK
         except Exception as e:
-            return jsonify(reason="Server error", error=e.__str__()), HttpStatus.INTERNAL_SERVER_ERROR 
+            return jsonify(reason="Server error", error=e.__str__()), HttpStatus.INTERNAL_SERVER_ERROR # pragma: no mutate
 
+    #Not used
     @staticmethod
     def getCategoryById(cid):
         try:
@@ -45,7 +46,7 @@ class CategoryHandler:
             }
             return jsonify(result), HttpStatus.OK
         except Exception as e:
-            return jsonify(reason="Server error", error=e.__str__()), HttpStatus.INTERNAL_SERVER_ERROR 
+            return jsonify(reason="Server error", error=e.__str__()), HttpStatus.INTERNAL_SERVER_ERROR # pragma: no mutate
 
     @staticmethod
     def createCategory(json):
@@ -63,18 +64,18 @@ class CategoryHandler:
                 }
                 return jsonify(result), HttpStatus.CREATED
             except Exception as err:
-                return jsonify(message="Server error!", error=err.__str__()), HttpStatus.INTERNAL_SERVER_ERROR
+                return jsonify(message="Server error!", error=err.__str__()), HttpStatus.INTERNAL_SERVER_ERROR # pragma: no mutate
         else:
             return jsonify(message="Bad Request!"), HttpStatus.BAD_REQUEST
 
     @staticmethod
     def deleteCategory(category_id, user_id):
-        try:
+        if category_id and user_id:
             deleted_categories = Category.delete(category_id, user_id)
             result = {
                 "message": "Success!",
                 "category": to_dict(deleted_categories)
             }
             return jsonify(result), HttpStatus.OK
-        except:
+        else:
             return jsonify(message="Bad Request!"), HttpStatus.BAD_REQUEST

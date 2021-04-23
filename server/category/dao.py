@@ -5,12 +5,12 @@ from package.dao import Package
 import uuid
 
 class Category(db.Model):
-    REQUIRED_PARAMETERS = {'user_id', 'name'}
+    REQUIRED_PARAMETERS = {'user_id', 'name'} # pragma: no mutate
     
-    __tablename__ = 'category'
-    category_id = db.Column(db.Integer, primary_key=True, nullable=False)
-    user_id = db.Column(UUID(as_uuid=True), db.ForeignKey('user.user_id'),nullable=False) 
-    name = db.Column(db.String(30), nullable=False)
+    __tablename__ = 'category' # pragma: no mutate
+    category_id = db.Column(db.Integer, primary_key=True, nullable=False) # pragma: no mutate
+    user_id = db.Column(UUID(as_uuid=True), db.ForeignKey('user.user_id'),nullable=False)  # pragma: no mutate
+    name = db.Column(db.String(30), nullable=False) # pragma: no mutate
 
     def __init__(self, **args):
         self.user_id = args.get('user_id')
@@ -59,7 +59,7 @@ class Category(db.Model):
     # Moved here to remove circular import
     @staticmethod
     def getPackageByTrackingNumberAndUserId(tnumber, uid):
-        return Category().query.filter_by(user_id=uid).join(Package, Category.category_id==Package.category_id).filter_by(tracking_number=tnumber).all()
+        return Category().query.filter_by(user_id=uid).join(Package, Category.category_id==Package.category_id).filter_by(tracking_number=tnumber).all() # pragma: no mutate
 
     def create(self):
         db.session.add(self)

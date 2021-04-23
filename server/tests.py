@@ -36,10 +36,11 @@ class UtilsTest(TestClient):
 
 class UserDAOTest(TestClient):
     def test_create_user(self):
-        data = {'email':'test', 'password':'test', 'username': 'test'}
+        data = {'email':'test', 'password':'test', 'username': 'test', 'active': True}
         user = User(**data).create()
         assert user.username == 'test'
         assert user.email == 'test'
+        assert user.active == True
 
     def test_get_all_users(self):
         data1 = {'email':'test', 'password':'test', 'username': 'test'}
@@ -71,6 +72,12 @@ class UserDAOTest(TestClient):
         user = User(**data).create()
         result = User.getUserByUsername(user.username)
         assert user == result
+
+    def test_activate_user(self):
+        data = {'email':'test', 'password':'test', 'username': 'test'}
+        user = User(**data).create()
+        user.activateUser()
+        assert user.active == True
 
 class CategoryDAOTest(TestClient):
     def test_create_category(self):
@@ -127,18 +134,28 @@ class PackageDAOTest(TestClient):
     pass
 
 class ApiTest(TestClient):
-#     def test_create_user(self):
-#         response = self.client.post('/users', 
-#                                     data=json.dumps(dict(email='test@test.com', password='test', username='test')),
-#                                     content_type='application/json')
-#         assert response.json['message'] == 'Success!'
-#         assert response.json['user']['active'] == False
-#         assert response.json['user']['email'] == 'test@test.com'
-#         assert response.json['user']['username'] == 'test'
+    def test_create_user(self):
+        response = self.client.post('/users', 
+                                    data=json.dumps(dict(email='test@test.com', password='test', username='test')),
+                                    content_type='application/json')
+        assert response.json['message'] == 'Success!'
+        assert response.json['user']['active'] == False
+        assert response.json['user']['email'] == 'test@test.com'
+        assert response.json['user']['username'] == 'test'
 
     def test_fail_create_user(self):
         data = {'email':'test', 'password':'test', 'username': 'test'}
         user = User(**data).create()
+
+        response = self.client.post('/users', 
+                                    data=json.dumps(dict(email='test2', password='test', username='test')),
+                                    content_type='application/json')
+        assert response.json == {'message':'Username already taken. Please use another one.'}
+
+        response = self.client.post('/users', 
+                                    data=json.dumps(dict(email='test', password='test', username='test2')),
+                                    content_type='application/json')
+        assert response.json == {'message':'Email already taken. Please use another one.'}
 
         response = self.client.post('/users', 
                                     data=json.dumps(dict(email='test', password='test', username='test')),
@@ -201,17 +218,41 @@ class ApiTest(TestClient):
         assert category1['user_id'] == str(category.user_id)
         assert category1['name'] == category.name
 
-    # UUID is not json serializable
-    # def test_create_category(self):
-        # userData = {'email':'test', 'password':'test', 'username': 'test'}
-        # user = User(**userData).create()
+    def test_create_category(self):
+        userData = {'email':'test', 'password':'test', 'username': 'test'}
+        user = User(**userData).create()
 
-        # response = self.client.post('/categories',
-                                    # data=json.dumps(dict(user_id=user.user_id, name='test_category')),
-                                    # content_type='application/json')
-        # assert response.json['message'] == 'Success!'
-        # assert response['category']['user_id'] == str(user.user_id)
-        # assert response['category']['name'] == 'test_category'
+        response = self.client.post('/categories',
+                                    data=json.dumps(dict(user_id=str(user.user_id), name='test_category')),
+                                    content_type='application/json')
+        assert response.json['message'] == 'Success!'
+        assert response.json['category']['user_id'] == str(user.user_id)
+        assert response.json['category']['name'] == 'test_category'
+
+    def test_fail_create_category(self):
+        userData = {'email':'test', 'password':'test', 'username': 'test'}
+        user = User(**userData).create()
+
+        categoryData = {'user_id': user.user_id, 'name':'test_category'}
+        category = Category(**categoryData).create()
+
+        response = self.client.post('/categories',
+                                data=json.dumps(dict(user_id=str(user.user_id), name='test_category')),
+                                content_type='application/json')
+
+        assert response.json['message'] == 'The category you tried to create already exsists.'
+    
+    def test_delete_category(self):
+        userData = {'email':'test', 'password':'test', 'username': 'test'}
+        user = User(**userData).create()
+
+        categoryData = {'user_id': user.user_id, 'name':'test_category'}
+        category = Category(**categoryData).create()
+
+        response = self.client.delete(f'/users/{user.user_id}/categories/{category.category_id}')
+
+        assert response.json['message'] == 'Success!'
+        assert response.json['category']['name'] == category.name
 
     def test_get_category_by_user_id(self):
         userData = {'email':'test', 'password':'test', 'username': 'test'}
