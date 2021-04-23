@@ -1,5 +1,5 @@
 from api import db
-from category.dao import Category
+# from category.dao import Category
 from datetime import datetime
 
 class Package(db.Model):
@@ -50,9 +50,10 @@ class Package(db.Model):
     def getPackageByTrackingNumber(tnumber):
         return Package().query.filter_by(tracking_number=tnumber).first()
 
-    @staticmethod
-    def getPackageByTrackingNumberAndUserId(tnumber, uid):
-        return Category().query.filter_by(user_id=uid).join(Package, Category.category_id==Package.category_id).filter_by(tracking_number=tnumber).all()
+    # A circular import occurs. We should consider using a repository pattern istead of DAO pattern in order to get software desing that is consistent with our domain.
+    # @staticmethod
+    # def getPackageByTrackingNumberAndUserId(tnumber, uid):
+        # return Category().query.filter_by(user_id=uid).join(Package, Category.category_id==Package.category_id).filter_by(tracking_number=tnumber).all()
 
     def create(self):
         db.session.add(self)

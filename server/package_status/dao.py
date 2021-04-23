@@ -2,6 +2,14 @@ from api import db
 from package.dao import Package
 from datetime import datetime
 
+class Location(db.Model):
+    __tablename__ = 'location'
+    location_id = db.Column(db.Integer, primary_key=True, nullable=False)
+    country = db.Column(db.Text, nullable=False)
+    state = db.Column(db.Text)
+    city = db.Column(db.Text, nullable=False)
+    postal_code = db.Column(db.Text, nullable=False)
+
 class PackageStatus(db.Model):
     REQUIRED_PARAMETERS = {'description', 'code', 'date', 'package_id'}
     

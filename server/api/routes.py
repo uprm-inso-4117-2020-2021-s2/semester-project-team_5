@@ -41,6 +41,11 @@ def get_categories_by_user_id(user_id):
     if request.method == 'GET':
         return CategoryHandler.getCategoriesByUserId(user_id)
 
+@app.route("/users/<string:user_id>/categories/<int:category_id>", methods=['DELETE'])
+def delete_category_by_user_id(user_id, category_id):
+    if request.method == 'DELETE':
+        return CategoryHandler.deleteCategory(category_id, user_id)
+
 @app.route("/packages", methods=['GET', 'POST', 'DELETE'])
 def get_all_packages_or_create():
     if request.method == 'GET':

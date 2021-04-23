@@ -5,6 +5,7 @@ from api import to_dict, verify_parameters, app, mail, HttpStatus
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask_jwt_extended import create_access_token
 from passlib.hash import pbkdf2_sha256 as sha256
+from category.dao import Category
 
 class UserHandler:
 
@@ -64,6 +65,10 @@ class UserHandler:
 
                 #sends an activation email to the user
                 UserHandler.sendActivationEmail(json['email'])
+
+                #Create unlisted category. Will serve as default category for unlisted packages
+                Category(**{'user_id': created_user.user_id, 'name': 'unlisted'}).create()
+
                 #returns created user, however, if send activation email fails, user must request another email
                 return jsonify(result), HttpStatus.CREATED
 
