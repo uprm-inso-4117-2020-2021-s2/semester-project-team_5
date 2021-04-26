@@ -94,15 +94,16 @@ class PackageHandler:
 
     @staticmethod
     def createPackage(json):
+        user_id = json.pop('user_id',None)
         valid_params = verify_parameters(json, Package.REQUIRED_PARAMETERS)
-        if valid_params:
+        if valid_params and user_id:
             try:
-                package_exists = Category.getPackageByTrackingNumberAndUserId(json['tracking_number'], json['user_id'])
+                package_exists = Category.getPackageByTrackingNumberAndUserId(json['tracking_number'], user_id)
                 #does the user already has the package added in his account?
                 if package_exists:
                     return jsonify(message="The package you tried to create already exists in your account."), HttpStatus.BAD_REQUEST
 
-                user_category = Category.getCategoriesByUserId(json['user_id'])
+                user_category = Category.getCategoriesByUserId(user_id)
                 #is the user trying to add the package to a category that doesn't belong to his account?
                 #in theory, this should not happen but the condition is here just in case.
                 #there might be better ways to implement the following verification
