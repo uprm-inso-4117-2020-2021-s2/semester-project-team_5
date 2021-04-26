@@ -20,28 +20,18 @@ class Homepage extends Component {
         flexWrap="wrap"
       >
         <div>
-          <img
-            id="homeImage"
-            src={people}
-            alt=""
-          />
+          <img id="homeImage" src={people} alt="" />
         </div>
 
         <div class="about-container">
           <h2>About us</h2>
-            <div className="aboutUs">  
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque a
-            arcu sem. Suspendisse potenti. Lorem ipsum dolor sit amet,
-            consectetur adipiscing elit. Mauris ut felis mattis, tempus libero
-            nec, gravida est. Phasellus vitae tincidunt velit. Duis et nunc vel
-            lorem commodo vulputate. Integer vel gravida turpis. Pellentesque
-            orci est, vehicula eu sem vel, varius dictum nisl. Interdum et
-            malesuada fames ac ante ipsum primis in faucibus. Curabitur
-            vulputate auctor sapien sit amet aliquet. Morbi elit tortor,
-            facilisis non arcu ac, tristique commodo metus. Nullam vestibulum
-            eget purus vestibulum ultricies.
+          <div className="aboutUs">
+            Our goal with TrackPack is to provide a free to use web-application
+            where users can in organized way add their current packages that
+            have shipped and are bought from different online stores in a single
+            easy to use and organized place.
             <div className="bottomBar"></div>
-            </div>
+          </div>
         </div>
       </Flex>
     );
