@@ -110,7 +110,7 @@ class UserHandler:
             user = User.getUserByEmail(json['email'])
             #if user exists and password match return a valid JWT in the response otherwise return error.
             if user and sha256.verify(json['password'], user.password):
-                access_token = create_access_token(identity = user.user_id)
+                access_token = create_access_token(identity = user.user_id) #pragma: no mutate
                 return jsonify(access_token = access_token), HttpStatus.OK
             else:
                 return jsonify(Error = 'Email or password is incorrect'), HttpStatus.NOT_FOUND

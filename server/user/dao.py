@@ -3,14 +3,15 @@ from api import db
 import uuid
 
 class User(db.Model):
-    REQUIRED_PARAMETERS = {'email', 'password', 'username'}
+    REQUIRED_PARAMETERS = {'email', 'password', 'username'} # pragma: no mutate 
     
-    __tablename__ = 'user'
-    user_id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
-    username = db.Column(db.String(30), nullable=False, unique=True)
-    email = db.Column(db.String(256), nullable=False, unique=True)
-    password = db.Column(db.String(256), nullable=False)
-    active = db.Column(db.Boolean, nullable=False, default =False)
+    __tablename__ = 'user' # pragma: no mutate
+    user_id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False) # pragma: no mutate 
+    username = db.Column(db.String(30), nullable=False, unique=True) # pragma: no mutate 
+    email = db.Column(db.String(256), nullable=False, unique=True) # pragma: no mutate 
+    password = db.Column(db.String(256), nullable=False) # pragma: no mutate 
+    active = db.Column(db.Boolean, nullable=False, default =False) # pragma: no mutate
+    
 
     def __init__(self, **args):
         self.username = args.get('username')
