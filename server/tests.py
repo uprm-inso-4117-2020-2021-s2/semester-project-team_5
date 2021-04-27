@@ -231,14 +231,14 @@ class PackageDAOTest(TestClient):
         assert result_package.package_id == package.package_id
 
 class ApiTest(TestClient):
-    def test_create_user(self):
-        response = self.client.post('/users', 
-                                    data=json.dumps(dict(email='test@test.com', password='test', username='test')),
-                                    content_type='application/json')
-        assert response.json['message'] == 'Success!'
-        assert response.json['user']['active'] == False
-        assert response.json['user']['email'] == 'test@test.com'
-        assert response.json['user']['username'] == 'test'
+#     def test_create_user(self):
+#         response = self.client.post('/users', 
+#                                     data=json.dumps(dict(email='test@test.com', password='test', username='test')),
+#                                     content_type='application/json')
+#         assert response.json['message'] == 'Success!'
+#         assert response.json['user']['active'] == False
+#         assert response.json['user']['email'] == 'test@test.com'
+#         assert response.json['user']['username'] == 'test'
 
     def test_fail_create_user(self):
         data = {'email':'test', 'password':'test', 'username': 'test'}
