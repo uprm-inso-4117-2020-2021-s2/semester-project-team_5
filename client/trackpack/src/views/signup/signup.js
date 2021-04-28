@@ -183,7 +183,7 @@ class Signup extends Component {
                 type="submit"
                 borderRadius="20px"
                 color="white"
-                backgroundColor="#2C148C"
+                backgroundColor="#7EBDC2"
               >
                 Continue
               </Button>
@@ -198,7 +198,7 @@ class Signup extends Component {
             to="/signin"
             borderRadius="20px"
             color="white"
-            backgroundColor="#2C148C"
+            backgroundColor="#7EBDC2"
             marginBottom="20px"
           >
             Sign-In
@@ -209,7 +209,7 @@ class Signup extends Component {
             onClick={this.onChange}
             borderRadius="20px"
             color="white"
-            backgroundColor="#2C148C"
+            backgroundColor="#7EBDC2"
             marginBottom="20px"
           >
             PopUp

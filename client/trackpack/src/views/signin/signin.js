@@ -106,7 +106,7 @@ class Signin extends Component {
                 type="submit"
                 borderRadius="20px"
                 color="white"
-                backgroundColor="#2C148C"
+                backgroundColor="#7EBDC2"
               >
                 Continue
               </Button>
@@ -129,7 +129,7 @@ class Signin extends Component {
             to="/signup"
             borderRadius="20px"
             color="white"
-            backgroundColor="#2C148C"
+            backgroundColor="#7EBDC2"
             marginBottom="20px"
           >
             Register
@@ -140,7 +140,7 @@ class Signin extends Component {
             to="/"
             borderRadius="20px"
             color="white"
-            backgroundColor="#2C148C"
+            backgroundColor="#7EBDC2"
             marginBottom="20px"
             marginRight="12px"
           >
