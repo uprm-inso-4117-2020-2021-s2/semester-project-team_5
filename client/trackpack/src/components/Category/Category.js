@@ -64,7 +64,6 @@ class Category extends Component {
                     let map = this.state.categoriesHidden
                     map[category.category_id] = !map[category.category_id]
                     this.setState({categorysHidden: map})
-                    console.log(this.state.categorysHidden)
                   }}>
                       <span>
                         {this.state.categoriesHidden[category.category_id]  && (<BsFillCaretDownFill size="20px" />) }

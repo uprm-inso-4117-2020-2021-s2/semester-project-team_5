@@ -17,13 +17,8 @@ import {
    } from "@chakra-ui/react";
 
 const AddPackageModal = (props) => {
-    const {isAddingPackage, onClose} = props;
-    const [values] = useState([
-      { option: "Unlisted" },
-      { option: "Electronics" },
-      { option: "Food" },
-      { option: "Clothes" },
-    ]);
+    const {isAddingPackage, onClose, categories} = props;
+
     const [icon, setIcon] = useState("")
     return ( 
         <Fragment>
@@ -47,8 +42,9 @@ const AddPackageModal = (props) => {
                     </FormLabel>
                     <Select placeholder="Select a category">
                       {/* in the future this will use the categories obtained from an API call. */ }
-                    {values.map((value) => (
-                    <option key={value.option}>{value.option}</option>
+                    {categories.map((value) =>  
+                    (
+                    <option key={value.category_id}>{value.name}</option>
                     ))}
                     </Select>
                   </FormControl>
@@ -62,7 +58,7 @@ const AddPackageModal = (props) => {
                     <FormLabel>
                       Select Package Icon
                     </FormLabel>
-                        <IconPicker value={icon} onChange={(v) => {setIcon(v); console.log(v)}} />
+                        <IconPicker value={icon} onChange={(v) => setIcon(v)} />
                     </FormControl>
                 </ModalBody> 
                 <ModalFooter>
