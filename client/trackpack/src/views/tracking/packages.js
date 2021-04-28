@@ -35,6 +35,9 @@ class Packages extends Component {
         });
         this.setState({ loading: false });
     }
+    else {
+      this.setState({ loading: false });
+    }
   }
 
   render() {

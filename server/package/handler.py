@@ -3,6 +3,7 @@ from package.dao import Package
 from package_status.dao import PackageStatus
 from category.dao import Category
 from api import to_dict, verify_parameters, HttpStatus
+import requests
 
 class PackageHandler:
 
@@ -94,35 +95,50 @@ class PackageHandler:
 
     @staticmethod
     def createPackage(json):
-        valid_params = verify_parameters(json, Package.REQUIRED_PARAMETERS)
+        print(json)
+        valid_params =  verify_parameters(json, Package.REQUIRED_PARAMETERS)
         if valid_params:
             try:
-                package_exists = Category.getPackageByTrackingNumberAndUserId(json['tracking_number'], json['user_id'])
-                #does the user already has the package added in his account?
-                if package_exists:
-                    return jsonify(message="The package you tried to create already exists in your account."), HttpStatus.BAD_REQUEST
+                res = requests.get("https://wwwcie.ups.com/track/v1/details/" + str(json['tracking_number']), headers={
+                    "Content-Type": "application/json",
+                    "transId": "1234",
+                    "transactionSrc": "TestTrack",
+                    "AccessLicenseNumber": "6D96561E525FE615",
+                    # // "Username": "trackpack4117",
+                    # // "password": "In$o41172021",
+                    "Connection": "keep-alive",
+                    # // "Accept": "*/*",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
+                })
+                pprint(res.json())
+                return res.json(), HttpStatus.OK
+            #     package_exists = Category.getPackageByTrackingNumberAndUserId(json['tracking_number'], json['user_id'])
+            #     #does the user already has the package added in his account?
+            #     if package_exists:
+            #         return jsonify(message="The package you tried to create already exists in your account."), HttpStatus.BAD_REQUEST
 
-                user_category = Category.getCategoriesByUserId(json['user_id'])
-                #is the user trying to add the package to a category that doesn't belong to his account?
-                #in theory, this should not happen but the condition is here just in case.
-                #there might be better ways to implement the following verification
+            #     user_category = Category.getCategoriesByUserId(json['user_id'])
+            #     #is the user trying to add the package to a category that doesn't belong to his account?
+            #     #in theory, this should not happen but the condition is here just in case.
+            #     #there might be better ways to implement the following verification
 
-                category_valid = False
-                for category in user_category:
-                    curr_category = to_dict(category)
-                    if curr_category['category_id'] == json['category_id']:
-                        category_valid = True
+            #     category_valid = False
+            #     for category in user_category:
+            #         curr_category = to_dict(category)
+            #         if curr_category['category_id'] == json['category_id']:
+            #             category_valid = True
 
-                if not category_valid or not user_category:
-                    return jsonify(message="You are trying to add the package to a category that doesn't belong to your account."), HttpStatus.BAD_REQUEST
+            #     if not category_valid or not user_category:
+            #         return jsonify(message="You are trying to add the package to a category that doesn't belong to your account."), HttpStatus.BAD_REQUEST
                 
-                package = Package(**valid_params).create()
-                package_dict = to_dict(package)
-                result = {
-                    "message": "Success!",
-                    "package": package_dict,
-                }
-                return jsonify(result), HttpStatus.CREATED
+            #     package = Package(**valid_params).create()
+            #     package_dict = to_dict(package)
+            #     result = {
+            #         "message": "Success!",
+            #         "package": package_dict,
+            #     }
+            #     return jsonify(result), HttpStatus.CREATED
             except Exception as err:
                 return jsonify(message="Server error!", error=err.__str__()), HttpStatus.INTERNAL_SERVER_ERROR
         else:
