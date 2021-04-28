@@ -85,7 +85,7 @@ class Category extends Component {
       return packages.packages.map((pack) => {
         return  <div className={this.state.categoriesHidden[pack.category_id] ? "packageNoInfo" : "packageInfo"}>
         <div className="imageContainer">
-              <IconPickerItem icon={pack.image_name} size={125}/>  
+              <IconPickerItem icon={pack.image_name} size={125} color="	#ffffff"/>  
         </div>
         <div className="itemName">
           <span id="iName">{pack.name}</span>
