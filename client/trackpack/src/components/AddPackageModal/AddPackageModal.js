@@ -1,4 +1,6 @@
 import React, {Fragment, useState}  from 'react';
+import { IconPicker } from 'react-fa-icon-picker'
+
 import {
     Modal,
     ModalOverlay,
@@ -16,12 +18,13 @@ import {
 
 const AddPackageModal = (props) => {
     const {isAddingPackage, onClose} = props;
-    const [values, setValues] = useState([
+    const [values] = useState([
       { option: "Unlisted" },
       { option: "Electronics" },
       { option: "Food" },
       { option: "Clothes" },
     ]);
+    const [icon, setIcon] = useState("")
     return ( 
         <Fragment>
             <Modal isCentered isOpen={isAddingPackage} onClose={() => onClose(false)}> 
@@ -57,10 +60,10 @@ const AddPackageModal = (props) => {
                   </FormControl>
                   <FormControl>
                     <FormLabel>
-                      Add a Package Image
+                      Select Package Icon
                     </FormLabel>
-                    <Button> Pick an image</Button>
-                  </FormControl>
+                        <IconPicker value={icon} onChange={(v) => {setIcon(v); console.log(v)}} />
+                    </FormControl>
                 </ModalBody> 
                 <ModalFooter>
                 <Button>Add Package</Button>

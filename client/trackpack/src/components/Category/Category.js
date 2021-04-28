@@ -1,7 +1,8 @@
 import React, { Component } from "react";
+import { IconPickerItem } from 'react-fa-icon-picker'
 import axios from "axios";
 import "./Category.css";
-import { BsFillCaretDownFill, BsFillCaretUpFill } from "react-icons/bs";
+import { BsFillCaretDownFill, BsFillCaretUpFill} from "react-icons/bs";
 
 class Category extends Component {
   constructor() {
@@ -78,16 +79,13 @@ class Category extends Component {
       });
     }
   }
+
   renderPackages(packagesArr) {
     return packagesArr.map((packages) => {
       return packages.packages.map((pack) => {
         return  <div className={this.state.categoriesHidden[pack.category_id] ? "packageNoInfo" : "packageInfo"}>
         <div className="imageContainer">
-          <img
-            className="icon"
-            src="https://static.thenounproject.com/png/20088-200.png"
-            placeholder="stock image"
-          ></img>
+              <IconPickerItem icon={pack.image_name} size={125}/>  
         </div>
         <div className="itemName">
           <span id="iName">{pack.name}</span>

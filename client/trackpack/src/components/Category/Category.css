@@ -14,8 +14,7 @@
   }
   
   .imageContainer {
-    /* background-color: brown; */
-    width: 60%;
+    margin-top: 2vw;
     display: flex;
     justify-content: center;
   }
