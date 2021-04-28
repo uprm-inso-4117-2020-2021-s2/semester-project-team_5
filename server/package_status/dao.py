@@ -3,22 +3,22 @@ from package.dao import Package
 from datetime import datetime
 
 class Location(db.Model):
-    __tablename__ = 'location'
-    location_id = db.Column(db.Integer, primary_key=True, nullable=False)
-    country = db.Column(db.Text, nullable=False)
-    state = db.Column(db.Text)
-    city = db.Column(db.Text, nullable=False)
-    postal_code = db.Column(db.Text, nullable=False)
+    __tablename__ = 'location' # pragma: no mutate
+    location_id = db.Column(db.Integer, primary_key=True, nullable=False) # pragma: no mutate
+    country = db.Column(db.Text, nullable=False) # pragma: no mutate
+    state = db.Column(db.Text) # pragma: no mutate
+    city = db.Column(db.Text, nullable=False) # pragma: no mutate
+    postal_code = db.Column(db.Text, nullable=False) # pragma: no mutate
 
 class PackageStatus(db.Model):
-    REQUIRED_PARAMETERS = {'description', 'code', 'date', 'package_id'}
+    REQUIRED_PARAMETERS = {'description', 'code', 'date', 'package_id'} # pragma: no mutate
     
-    __tablename__ = 'status'
-    status_id = db.Column(db.Integer, primary_key=True, nullable=False)
-    description = db.Column(db.Text, nullable=False)
-    code = db.Column(db.Text, nullable=False)
-    date = db.Column(db.Date, nullable=False)
-    package_id = db.Column(db.Integer, db.ForeignKey('package.package_id'), nullable=False)
+    __tablename__ = 'status' # pragma: no mutate
+    status_id = db.Column(db.Integer, primary_key=True, nullable=False) # pragma: no mutate
+    description = db.Column(db.Text, nullable=False) # pragma: no mutate
+    code = db.Column(db.Text, nullable=False) # pragma: no mutate
+    date = db.Column(db.Date, nullable=False) # pragma: no mutate
+    package_id = db.Column(db.Integer, db.ForeignKey('package.package_id'), nullable=False) # pragma: no mutate
 
     def __init__(self, **args):
         self.description = args.get('description')

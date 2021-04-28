@@ -36,10 +36,11 @@ class UtilsTest(TestClient):
 
 class UserDAOTest(TestClient):
     def test_create_user(self):
-        data = {'email':'test', 'password':'test', 'username': 'test'}
+        data = {'email':'test', 'password':'test', 'username': 'test', 'active': True}
         user = User(**data).create()
         assert user.username == 'test'
         assert user.email == 'test'
+        assert user.active == True
 
     def test_get_all_users(self):
         data1 = {'email':'test', 'password':'test', 'username': 'test'}
@@ -71,6 +72,12 @@ class UserDAOTest(TestClient):
         user = User(**data).create()
         result = User.getUserByUsername(user.username)
         assert user == result
+
+    def test_activate_user(self):
+        data = {'email':'test', 'password':'test', 'username': 'test'}
+        user = User(**data).create()
+        user.activateUser()
+        assert user.active == True
 
 class CategoryDAOTest(TestClient):
     def test_create_category(self):
@@ -123,8 +130,105 @@ class CategoryDAOTest(TestClient):
         result_categories = Category.getCategoriesByUserId(user.user_id)
         assert result_categories[0] == category
 
+    def test_get_package_by_tracking_number_and_userId(self):
+        userData = {'email':'test', 'password':'test', 'username': 'test'}
+        user = User(**userData).create()
+
+        categoryData = {'user_id': user.user_id, 'name':'test_category'}
+        category = Category(**categoryData).create()
+
+        packageData = {'carrier': 'ups', 'tracking_number':'122833234', 'name':'test', 'creation_date':'21-04-2021', 'category_id':category.category_id}
+        package = Package(**packageData).create()
+        result_category= Category.getPackageByTrackingNumberAndUserId('122833234',str(user.user_id))
+        assert result_category[0].category_id== category.category_id
+
 class PackageDAOTest(TestClient):
-    pass
+    def test_create_package(self):
+        userData = {'email':'test', 'password':'test', 'username': 'test'}
+        user = User(**userData).create()
+
+        categoryData = {'user_id': user.user_id, 'name':'test_category'}
+        category = Category(**categoryData).create()
+
+        packageData = {'carrier': 'ups', 'tracking_number':'122833234', 'name':'test', 'creation_date':'21-04-2021', 'category_id':category.category_id}
+        package = Package(**packageData).create()
+        assert package.carrier == 'ups'
+        assert package.tracking_number == '122833234'
+        assert package.name == 'test'
+        assert str(package.creation_date) == '2021-04-21'
+        assert package.category_id == category.category_id
+
+    def test_get_all_packages(self):
+        userData = {'email':'test', 'password':'test', 'username': 'test'}
+        user = User(**userData).create()
+
+        categoryData = {'user_id': user.user_id, 'name':'test_category'}
+        category = Category(**categoryData).create()
+
+        packageData = {'carrier': 'ups', 'tracking_number':'122833234', 'name':'test', 'creation_date':'21-04-2021', 'category_id':category.category_id}
+        package = Package(**packageData).create()
+
+        packageData = {'carrier': 'ups', 'tracking_number':'128332353', 'name':'test2', 'creation_date':'21-04-2021', 'category_id':category.category_id}
+        package1 = Package(**packageData).create()
+
+        packages = Package.getAllPackages()
+        assert packages[0].package_id == package.package_id
+        assert packages[1].package_id == package1.package_id
+
+    def test_get_package_by_id_or_carrier(self):
+        userData = {'email':'test', 'password':'test', 'username': 'test'}
+        user = User(**userData).create()
+
+        categoryData = {'user_id': user.user_id, 'name':'test_category'}
+        category = Category(**categoryData).create()
+
+        packageData = {'carrier': 'ups', 'tracking_number':'122833234', 'name':'test', 'creation_date':'21-04-2021', 'category_id':category.category_id}
+        package = Package(**packageData).create()
+
+        result_package = Package.getPackageById(package.package_id)
+        assert result_package.package_id == package.package_id
+
+        result_package = Package.getPackagesByCarrier('ups')
+        assert result_package[0].package_id == package.package_id
+
+    def test_get_package_by_name(self):
+        userData = {'email':'test', 'password':'test', 'username': 'test'}
+        user = User(**userData).create()
+
+        categoryData = {'user_id': user.user_id, 'name':'test_category'}
+        category = Category(**categoryData).create()
+
+        packageData = {'carrier': 'ups', 'tracking_number':'122833234', 'name':'test', 'creation_date':'21-04-2021', 'category_id':category.category_id}
+        package = Package(**packageData).create()
+
+        result_package = Package.getPackagesByName('test')
+        assert result_package[0].package_id == package.package_id
+
+    def test_get_package_by_category(self):
+        userData = {'email':'test', 'password':'test', 'username': 'test'}
+        user = User(**userData).create()
+
+        categoryData = {'user_id': user.user_id, 'name':'test_category'}
+        category = Category(**categoryData).create()
+
+        packageData = {'carrier': 'ups', 'tracking_number':'122833234', 'name':'test', 'creation_date':'21-04-2021', 'category_id':category.category_id}
+        package = Package(**packageData).create()
+
+        result_package = Package.getPackagesByCategory(category.category_id)
+        assert result_package[0].package_id == package.package_id
+
+    def test_get_package_by_tracking_number(self):
+        userData = {'email':'test', 'password':'test', 'username': 'test'}
+        user = User(**userData).create()
+
+        categoryData = {'user_id': user.user_id, 'name':'test_category'}
+        category = Category(**categoryData).create()
+
+        packageData = {'carrier': 'ups', 'tracking_number':'122833234', 'name':'test', 'creation_date':'21-04-2021', 'category_id':category.category_id}
+        package = Package(**packageData).create()
+
+        result_package = Package.getPackageByTrackingNumber('122833234')
+        assert result_package.package_id == package.package_id
 
 class ApiTest(TestClient):
 #     def test_create_user(self):
@@ -139,6 +243,16 @@ class ApiTest(TestClient):
     def test_fail_create_user(self):
         data = {'email':'test', 'password':'test', 'username': 'test'}
         user = User(**data).create()
+
+        response = self.client.post('/users', 
+                                    data=json.dumps(dict(email='test2', password='test', username='test')),
+                                    content_type='application/json')
+        assert response.json == {'message':'Username already taken. Please use another one.'}
+
+        response = self.client.post('/users', 
+                                    data=json.dumps(dict(email='test', password='test', username='test2')),
+                                    content_type='application/json')
+        assert response.json == {'message':'Email already taken. Please use another one.'}
 
         response = self.client.post('/users', 
                                     data=json.dumps(dict(email='test', password='test', username='test')),
@@ -201,17 +315,41 @@ class ApiTest(TestClient):
         assert category1['user_id'] == str(category.user_id)
         assert category1['name'] == category.name
 
-    # UUID is not json serializable
-    # def test_create_category(self):
-        # userData = {'email':'test', 'password':'test', 'username': 'test'}
-        # user = User(**userData).create()
+    def test_create_category(self):
+        userData = {'email':'test', 'password':'test', 'username': 'test'}
+        user = User(**userData).create()
 
-        # response = self.client.post('/categories',
-                                    # data=json.dumps(dict(user_id=user.user_id, name='test_category')),
-                                    # content_type='application/json')
-        # assert response.json['message'] == 'Success!'
-        # assert response['category']['user_id'] == str(user.user_id)
-        # assert response['category']['name'] == 'test_category'
+        response = self.client.post('/categories',
+                                    data=json.dumps(dict(user_id=str(user.user_id), name='test_category')),
+                                    content_type='application/json')
+        assert response.json['message'] == 'Success!'
+        assert response.json['category']['user_id'] == str(user.user_id)
+        assert response.json['category']['name'] == 'test_category'
+
+    def test_fail_create_category(self):
+        userData = {'email':'test', 'password':'test', 'username': 'test'}
+        user = User(**userData).create()
+
+        categoryData = {'user_id': user.user_id, 'name':'test_category'}
+        category = Category(**categoryData).create()
+
+        response = self.client.post('/categories',
+                                data=json.dumps(dict(user_id=str(user.user_id), name='test_category')),
+                                content_type='application/json')
+
+        assert response.json['message'] == 'The category you tried to create already exsists.'
+    
+    def test_delete_category(self):
+        userData = {'email':'test', 'password':'test', 'username': 'test'}
+        user = User(**userData).create()
+
+        categoryData = {'user_id': user.user_id, 'name':'test_category'}
+        category = Category(**categoryData).create()
+
+        response = self.client.delete(f'/users/{user.user_id}/categories/{category.category_id}')
+
+        assert response.json['message'] == 'Success!'
+        assert response.json['category']['name'] == category.name
 
     def test_get_category_by_user_id(self):
         userData = {'email':'test', 'password':'test', 'username': 'test'}
@@ -264,21 +402,20 @@ class ApiTest(TestClient):
         assert package1['name'] == package.name
         assert package1['tracking_number'] == package.tracking_number
 
-    # Error: user_id is needed in json but that json is used to create a package which does not expect the user_id argument. Could fix by separating user_id from json
-    # def test_create_package(self):
-        # userData = {'email':'test', 'password':'test', 'username': 'test'}
-        # user = User(**userData).create()
-# 
-        # categoryData = {'user_id': user.user_id, 'name':'test_category'}
-        # category = Category(**categoryData).create()
+    def test_create_package(self):
+        userData = {'email':'test', 'password':'test', 'username': 'test'}
+        user = User(**userData).create()
 
-        # response = self.client.post('/packages',
-                                    # data=json.dumps(dict(carrier='usps',tracking_number=212323123,name='test',creation_date='2021-02-01', category_id=category.category_id)),
-                                    # content_type='application/json')
-        # assert response.json['message'] == 'Success!'
-        # assert response['package']['carrier'] == 'usps'
-        # assert response['package']['name'] == 'test'
-        # assert response['package']['tracking_number'] == '212323123'
+        categoryData = {'user_id': user.user_id, 'name':'test_category'}
+        category = Category(**categoryData).create()
+
+        response = self.client.post('/packages',
+                                    data=json.dumps(dict(carrier='usps',tracking_number='212323123',name='test',creation_date='2021-02-01', category_id=category.category_id, user_id=str(user.user_id))),
+                                    content_type='application/json')
+        assert response.json['message'] == 'Success!'
+        assert response.json['package']['carrier'] == 'usps'
+        assert response.json['package']['name'] == 'test'
+        assert response.json['package']['tracking_number'] == '212323123'
 
     # If package has no status to be delete then it will
     def test_delete_package(self):

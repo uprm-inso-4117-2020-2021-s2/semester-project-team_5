@@ -3,16 +3,16 @@ from api import db
 from datetime import datetime
 
 class Package(db.Model):
-    REQUIRED_PARAMETERS = {'carrier', 'tracking_number', 'name', 'creation_date', 'category_id'}
+    REQUIRED_PARAMETERS = {'carrier', 'tracking_number', 'name', 'creation_date', 'category_id'} # pragma: no mutate
     
-    __tablename__ = 'package'
-    package_id = db.Column(db.Integer, primary_key=True, nullable=False)
-    carrier = db.Column(db.String(30), nullable=False)
-    tracking_number = db.Column(db.String(64), nullable=False)
-    name = db.Column(db.String(30), nullable=False)
-    creation_date = db.Column(db.Date, nullable=False)
-    category_id = db.Column(db.Integer, db.ForeignKey('category.category_id'), nullable=False)
-    image_path = db.Column(db.String(200), nullable=True)
+    __tablename__ = 'package'# pragma: no mutate
+    package_id = db.Column(db.Integer, primary_key=True, nullable=False)# pragma: no mutate
+    carrier = db.Column(db.String(30), nullable=False)# pragma: no mutate
+    tracking_number = db.Column(db.String(64), nullable=False)# pragma: no mutate
+    name = db.Column(db.String(30), nullable=False)# pragma: no mutate
+    creation_date = db.Column(db.Date, nullable=False)# pragma: no mutate
+    category_id = db.Column(db.Integer, db.ForeignKey('category.category_id'), nullable=False)# pragma: no mutate
+    image_path = db.Column(db.String(200), nullable=True)# pragma: no mutate
 
     def __init__(self, **args):
         self.carrier = args.get('carrier')
