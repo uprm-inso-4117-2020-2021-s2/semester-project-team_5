@@ -108,5 +108,6 @@ env/
 #Virtual environments
 *.venv
 *.env
+venv
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,windows,macos,linux,git
