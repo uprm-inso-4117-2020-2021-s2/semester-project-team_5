@@ -24,7 +24,7 @@
 .orderDetails {
   width: 400px;
   height: 500px;
-  background-color: #2c148c;
+  background-color: #7EBDC2;
   border-radius: 45px;
   position: relative;
   margin-bottom: 70px;
@@ -59,7 +59,7 @@
   position: absolute;
   left: 80px;
   bottom: -70px;
-  background-color: #f37602;
+  background-color: #F3DFA2;
   border-radius: 25px;
   width: 200px;
   color: white;
@@ -70,7 +70,7 @@
   position: absolute;
   left: 80px;
   bottom: -120px;
-  background-color: #f37602;
+  background-color: #F3DFA2;
   border-radius: 25px;
   width: 200px;
   color: white;

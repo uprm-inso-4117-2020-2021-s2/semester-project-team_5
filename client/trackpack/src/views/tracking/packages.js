@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Flex } from "@chakra-ui/react";
+import { Box, Button, Flex } from "@chakra-ui/react";
 import "./packages.css";
 import { BsSearch } from "react-icons/bs";
 import AddPackageModal from "../../components/AddPackageModal/AddPackageModal";
@@ -8,6 +8,7 @@ import Category from "../../components/Category/Category";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
 import Loader from "../../components/Loader/Loader";
+import { Heading } from "@chakra-ui/react"
 
 class Packages extends Component {
   state = {
@@ -83,9 +84,13 @@ class Packages extends Component {
 
         {this.state.isInCurrentOrders && (
         <div className="orderContainer">
-        <h1 className="htext">Current Orders:</h1>
-            <Category categories={this.state.categories}>
+          <Box d="flex" justifyContent="center">
+            <Heading className="htext">Current Orders:</Heading>
+          </Box>
+          <Flex flexDir="row">
+          <Category categories={this.state.categories}>
             </Category>
+          </Flex>
         </div>)
         }
 
@@ -100,12 +105,13 @@ class Packages extends Component {
             <AddPackageModal
               isAddingPackage={this.state.isAddingPackage}
               onClose={(isAddingPackage) => this.setState({ isAddingPackage })}
+              categories={this.state.categories.categories}
             />
             <AddCategoryModal
               isAddingCategory={this.state.isAddingCategory}
-              onClose={(isAddingCategory) =>
-                this.setState({ isAddingCategory })
-              }
+              onClose={(isAddingCategory) => this.setState({ isAddingCategory })}
+              userId={ jwt_decode(localStorage.jwtToken).sub }
+              categories={this.state.categories.categories}
             />
           </div>
         </div>

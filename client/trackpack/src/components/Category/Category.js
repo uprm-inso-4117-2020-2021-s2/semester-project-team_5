@@ -1,7 +1,9 @@
 import React, { Component } from "react";
+import { IconPickerItem } from 'react-fa-icon-picker'
 import axios from "axios";
 import "./Category.css";
-import { BsFillCaretDownFill, BsFillCaretUpFill } from "react-icons/bs";
+import { BsFillCaretDownFill, BsFillCaretUpFill} from "react-icons/bs";
+import { Box, Flex } from "@chakra-ui/layout";
 
 class Category extends Component {
   constructor() {
@@ -57,37 +59,38 @@ class Category extends Component {
         if (catPackages) {
           return (
             <React.Fragment>
-                  <span key={category.category_id} style={{marginLeft: "6vw"}}>{category.name}</span>
+              <Flex flexDir="column" justify="flex-start">
+
+                  <Box>
+                  <span key={category.category_id} >{category.name}</span>
 
                   <button style={{marginLeft: "0.5vw"}} onClick={() =>{
                     let map = this.state.categoriesHidden
                     map[category.category_id] = !map[category.category_id]
                     this.setState({categorysHidden: map})
-                    console.log(this.state.categorysHidden)
                   }}>
+                    
                       <span>
                         {this.state.categoriesHidden[category.category_id]  && (<BsFillCaretDownFill size="20px" />) }
                         {!this.state.categoriesHidden[category.category_id]  && (<BsFillCaretUpFill size="20px" />) }
                       </span>
                   </button>
-
+                  </Box>
               {catPackages ? this.renderPackages(catPackages) : ""}
+              </Flex>
             </React.Fragment>
           );
         }
       });
     }
   }
+
   renderPackages(packagesArr) {
     return packagesArr.map((packages) => {
       return packages.packages.map((pack) => {
         return  <div className={this.state.categoriesHidden[pack.category_id] ? "packageNoInfo" : "packageInfo"}>
         <div className="imageContainer">
-          <img
-            className="icon"
-            src="https://static.thenounproject.com/png/20088-200.png"
-            placeholder="stock image"
-          ></img>
+              <IconPickerItem icon={pack.image_name} size={125} color="	#ffffff"/>  
         </div>
         <div className="itemName">
           <span id="iName">{pack.name}</span>
@@ -103,7 +106,7 @@ class Category extends Component {
 
   render() {
     return (
-      <div style={{padding: "10vw"}}>
+      <div style={{padding: "5vw"}}>
         {this.renderCategories(this.props.categories)}
       </div>
     );

@@ -1,4 +1,6 @@
 import React, {Fragment, useState}  from 'react';
+import { IconPicker } from 'react-fa-icon-picker'
+
 import {
     Modal,
     ModalOverlay,
@@ -12,32 +14,31 @@ import {
     Input,
     Select,
     Button,
+    Alert,
+    AlertIcon
    } from "@chakra-ui/react";
 import jwt_decode from "jwt-decode";
 
 import { AddPackage } from "./AddPackage-services"
 
+const errors = {};
+
 const onSubmit = async (packageData) => {
-  // console.log(packageData);
   let userId = localStorage.jwtToken
       ? jwt_decode(localStorage.jwtToken).sub
       : undefined;
   packageData.user_id = userId
   let res = await AddPackage(packageData);
-  console.log(res)
+  errors = res;
 }
 
 const AddPackageModal = (props) => {
-    const {isAddingPackage, onClose} = props;
     const [trackingNumber, setTrackingNumber] = useState("");
     const [packageName, setPackageName] = useState("");
     const [category, setCategory] = useState("");
-    const [values, setValues] = useState([
-      { option: "Unlisted" },
-      { option: "Electronics" },
-      { option: "Food" },
-      { option: "Clothes" },
-    ]);
+    const {isAddingPackage, onClose, categories} = props;
+
+    const [icon, setIcon] = useState("")
     return ( 
         <Fragment>
             <Modal isCentered isOpen={isAddingPackage} onClose={() => onClose(false)}> 
@@ -47,6 +48,16 @@ const AddPackageModal = (props) => {
                   Add a new package to track
                 </ModalHeader>
                 <ModalCloseButton />
+                <Alert
+                  hidden={!errors.message}
+                  borderRadius="8px"
+                  fontSize="x-small"
+                  status="error"
+                  marginBottom="8px"
+                >
+                  <AlertIcon />
+                  {errors.message}
+                </Alert>
                 <ModalBody>
                   <FormControl>
                       <FormLabel> 
@@ -59,9 +70,8 @@ const AddPackageModal = (props) => {
                       Category
                     </FormLabel>
                     <Select onChange={e=> setCategory(e.target.value)} placeholder="Select a category">
-                      {/* in the future this will use the categories obtained from an API call. */ }
-                    {values.map((value) => (
-                    <option key={value.option}>{value.option}</option>
+                    {categories.map((value) => (
+                    <option key={value.name}>{value.name}</option>
                     ))}
                     </Select>
                   </FormControl>
@@ -73,10 +83,10 @@ const AddPackageModal = (props) => {
                   </FormControl>
                   <FormControl>
                     <FormLabel>
-                      Add a Package Image
+                      Select Package Icon
                     </FormLabel>
-                    <Button> Pick an image</Button>
-                  </FormControl>
+                        <IconPicker value={icon} onChange={(v) => setIcon(v)} />
+                    </FormControl>
                 </ModalBody> 
                 <ModalFooter>
                 <Button onClick={() => onSubmit({'tracking_number': trackingNumber, 'name': packageName, 'category_id': category, 'creation_date': Date.now()})}>Add Package</Button>

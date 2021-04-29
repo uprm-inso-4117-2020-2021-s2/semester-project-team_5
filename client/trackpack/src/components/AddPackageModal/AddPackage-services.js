@@ -1,14 +1,18 @@
 import axios from "axios";
 
 export const AddPackage = async (packageData) => {
+  let errorMessage;
   const carrier = determineCarrier(packageData.tracking_number);
   if (carrier) {
     packageData.carrier = carrier;
-
-    let res = axios.post("http://localhost:5000/packages", packageData);
-    return res;
+    let res = await axios
+      .post("http://localhost:5000/packages", packageData)
+      .catch((err) => {
+        errorMessage = err.response.data;
+      });
+    return errorMessage;
   } else {
-    return null;
+    return {'message': 'Tracking Number is invalid.'};
   }
 };
 

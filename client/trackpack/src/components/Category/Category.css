@@ -1,8 +1,8 @@
 .packageInfo {
-    background-color: #2c148c;
+    background-color: #7EBDC2;
     border-radius: 4.5vw;
     height: 15vw;
-    width: 65vw;
+    width: 60vw;
     margin: 1vw 3vw 3vw 3vw;
     display: flex;
     justify-content: space-around;
@@ -14,9 +14,7 @@
   }
   
   .imageContainer {
-    /* background-color: brown; */
-    width: 60%;
-    display: flex;
+    margin: 3vw;
     justify-content: center;
   }
   
@@ -45,17 +43,5 @@
     justify-content: center;
   }
   
-  .itemCategory {
-    display: flex;
-    margin-top: 100px;
-    position: relative;
-    top: 40px;
-    left: 100px;
-  }
+
   
-  .itemCategory2 {
-    margin-top: 100px;
-    position: relative;
-    top: 38px;
-    left: 100px;
-  }
