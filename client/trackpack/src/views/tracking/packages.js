@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Flex } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import "./packages.css";
 import { BsSearch } from "react-icons/bs";
 import AddPackageModal from "../../components/AddPackageModal/AddPackageModal";
@@ -97,12 +97,12 @@ class Packages extends Component {
             <AddPackageModal
               isAddingPackage={this.state.isAddingPackage}
               onClose={(isAddingPackage) => this.setState({ isAddingPackage })}
+              categories={this.state.categories.categories}
             />
             <AddCategoryModal
               isAddingCategory={this.state.isAddingCategory}
-              onClose={(isAddingCategory) =>
-                this.setState({ isAddingCategory })
-              }
+              onClose={(isAddingCategory) => this.setState({ isAddingCategory })}
+              userId={ jwt_decode(localStorage.jwtToken).sub }
             />
           </div>
         </div>

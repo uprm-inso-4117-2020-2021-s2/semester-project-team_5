@@ -1,4 +1,6 @@
 import React, {Fragment, useState}  from 'react';
+import { IconPicker } from 'react-fa-icon-picker'
+
 import {
     Modal,
     ModalOverlay,
@@ -15,13 +17,9 @@ import {
    } from "@chakra-ui/react";
 
 const AddPackageModal = (props) => {
-    const {isAddingPackage, onClose} = props;
-    const [values, setValues] = useState([
-      { option: "Unlisted" },
-      { option: "Electronics" },
-      { option: "Food" },
-      { option: "Clothes" },
-    ]);
+    const {isAddingPackage, onClose, categories} = props;
+
+    const [icon, setIcon] = useState("")
     return ( 
         <Fragment>
             <Modal isCentered isOpen={isAddingPackage} onClose={() => onClose(false)}> 
@@ -44,8 +42,9 @@ const AddPackageModal = (props) => {
                     </FormLabel>
                     <Select placeholder="Select a category">
                       {/* in the future this will use the categories obtained from an API call. */ }
-                    {values.map((value) => (
-                    <option key={value.option}>{value.option}</option>
+                    {categories.map((value) =>  
+                    (
+                    <option key={value.category_id}>{value.name}</option>
                     ))}
                     </Select>
                   </FormControl>
@@ -57,10 +56,10 @@ const AddPackageModal = (props) => {
                   </FormControl>
                   <FormControl>
                     <FormLabel>
-                      Add a Package Image
+                      Select Package Icon
                     </FormLabel>
-                    <Button> Pick an image</Button>
-                  </FormControl>
+                        <IconPicker value={icon} onChange={(v) => setIcon(v)} />
+                    </FormControl>
                 </ModalBody> 
                 <ModalFooter>
                 <Button>Add Package</Button>
