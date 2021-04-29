@@ -49,17 +49,3 @@
   justify-content: center;
 }
 
-.itemCategory {
-  display: flex;
-  margin-top: 100px;
-  position: relative;
-  top: 40px;
-  left: 100px;
-}
-
-.itemCategory2 {
-  margin-top: 100px;
-  position: relative;
-  top: 38px;
-  left: 100px;
-}
