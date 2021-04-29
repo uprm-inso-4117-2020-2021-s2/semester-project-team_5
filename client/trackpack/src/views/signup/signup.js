@@ -117,7 +117,7 @@ class Signup extends Component {
                  <AlertIcon />
                  {errors.message}
                  </Alert>
-                <FormLabel color="white">Name</FormLabel>
+                <FormLabel color="white">Username</FormLabel>
                 <Alert
                   hidden={!errors.username}
                   borderRadius="8px"

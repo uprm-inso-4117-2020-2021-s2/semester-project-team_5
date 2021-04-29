@@ -12,7 +12,7 @@ class Package(db.Model):
     name = db.Column(db.String(30), nullable=False)# pragma: no mutate
     creation_date = db.Column(db.Date, nullable=False)# pragma: no mutate
     category_id = db.Column(db.Integer, db.ForeignKey('category.category_id'), nullable=False)# pragma: no mutate
-    image_path = db.Column(db.String(200), nullable=True)# pragma: no mutate
+    image_name = db.Column(db.String(30), default='FaBox') # pragma: no mutate
 
     def __init__(self, **args):
         self.carrier = args.get('carrier')
@@ -20,7 +20,7 @@ class Package(db.Model):
         self.name = args.get('name')
         self.creation_date = args.get('creation_date')
         self.category_id = args.get('category_id')
-        self.image_path = args.get('image_path')
+        self.image_name = args.get('image_name')
 
     @property
     def pk(self):

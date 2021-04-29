@@ -4,7 +4,6 @@ import { ChakraProvider } from "@chakra-ui/react";
 import Topnav from "./components/Topnav";
 import Signup from "./views/signup/signup";
 import Signin from "./views/signin/signin";
-import Package from "./components/package";
 import Packages from "./views/tracking/packages";
 import Homepage from "./views/home/homepage";
 import TrackPackage from "./views/track/trackPackage";
