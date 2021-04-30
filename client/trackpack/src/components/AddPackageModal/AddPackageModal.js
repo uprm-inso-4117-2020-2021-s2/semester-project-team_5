@@ -24,12 +24,13 @@ import { AddPackage } from "./AddPackage-services"
 const errors = {};
 
 const onSubmit = async (packageData) => {
+  console.log(packageData.category_id);
   let userId = localStorage.jwtToken
       ? jwt_decode(localStorage.jwtToken).sub
       : undefined;
   packageData.user_id = userId
   let res = await AddPackage(packageData);
-  errors = res;
+  // errors = res;
 }
 
 const AddPackageModal = (props) => {
@@ -71,7 +72,7 @@ const AddPackageModal = (props) => {
                     </FormLabel>
                     <Select onChange={e=> setCategory(e.target.value)} placeholder="Select a category">
                     {categories.map((value) => (
-                    <option key={value.name}>{value.name}</option>
+                    <option value={value.category_id} key={value.category_id}>{value.name}</option>
                     ))}
                     </Select>
                   </FormControl>
@@ -89,7 +90,7 @@ const AddPackageModal = (props) => {
                     </FormControl>
                 </ModalBody> 
                 <ModalFooter>
-                <Button onClick={() => onSubmit({'tracking_number': trackingNumber, 'name': packageName, 'category_id': category, 'creation_date': Date.now()})}>Add Package</Button>
+                <Button onClick={() => onSubmit({'tracking_number': trackingNumber, 'name': packageName, 'category_id': category, 'creation_date': "2021-04-29"})}>Add Package</Button>
               </ModalFooter>
               </ModalContent>
               

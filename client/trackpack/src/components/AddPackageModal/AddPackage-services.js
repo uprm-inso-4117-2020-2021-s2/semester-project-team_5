@@ -5,14 +5,43 @@ export const AddPackage = async (packageData) => {
   const carrier = determineCarrier(packageData.tracking_number);
   if (carrier) {
     packageData.carrier = carrier;
-    let res = await axios
+    let res;
+    await axios
       .post("http://localhost:5000/packages", packageData)
+      .then((response) => {
+        res = response.data;
+      })
       .catch((err) => {
         errorMessage = err.response.data;
       });
-    return errorMessage;
+      console.log(res);
+    if (!errorMessage) {
+      let filteredData;
+      filteredData = filterPackageData(res.carrier_info);
+      filteredData.package_id = res.package.package_id;
+      let packageStatus;
+      packageStatus.description = filteredData.status.description;
+      packageStatus.code = filteredData.status.code;
+      packageStatus.date = filteredData.date;
+      packageStatus.package_id = filteredData.package_id;
+      await axios
+        .post("http://localhost:5000/packages-statuses", packageStatus)
+        .then((response) => {
+          res = response.data;
+        })
+        .catch((err) => {
+          errorMessage = err.response.data;
+        });
+      if (errorMessage) {
+        return errorMessage;
+      }
+      console.log(res);
+      return res;
+    } else {
+      return errorMessage;
+    }
   } else {
-    return {'message': 'Tracking Number is invalid.'};
+    return { message: "Tracking Number is invalid." };
   }
 };
 
@@ -49,3 +78,42 @@ const determineCarrier = (trackingNumber) => {
     return null;
   }
 };
+
+const filterPackageData = (packagaData) => {
+  let result = {};
+  for (let pack in packagaData.trackResponse.shipment) {
+    for (let activity in pack) {
+      for (let activityItem in activity) {
+        result.date = new Date(activityItem.date);
+        result.time = activityItem.time;
+        result.location = activityItem.location.address;
+        result.status = activityItem.status;
+      }
+    }
+  }
+  return result;
+};
+
+// {'trackResponse': {'shipment': [{'package': [{'activity': [{'date': '20191121',
+//                                                             'location': {'address': {'city': 'BALDWIN',
+//                                                                                      'country': 'US',
+//                                                                                      'postalCode': '',
+//                                                                                      'stateProvince': 'MD'}},
+//                                                             'status': {'code': '48',
+//                                                                        'description': 'DeliveryAttempted',
+//                                                                        'type': 'X'},
+//                                                             'time': '140400'},
+//                                                            {'date': '20191121',
+//                                                             'location': {'address': {'city': 'Sparks',
+//                                                                                      'country': 'US',
+//                                                                                      'postalCode': '',
+//                                                                                      'stateProvince': 'MD'}},
+//                                                             'status': {'code': '48',
+//                                                                        'description': "Thereceiverwasnotavailablefordelivery                                                                                     'country': 'US',
+//                                                                                      'postalCode': '',
+//                                                                                      'stty': '',ateProvince': ''}},                                                                     untry': 'US',
+//                                                             'status': {'code': 'MP',    stalCode': '',
+//                                                                        'description': 'OateProvince': ''}},rderProcessed:ReadyforUPS',
+//                                                                        'type': 'M'},    rderProcessed:ReadyforUPS',
+//                                                             'time': '132642'}],
+//                                               'trackingNumber': '1Z5338FF0107231059'}]}]}}                                                                                      }}

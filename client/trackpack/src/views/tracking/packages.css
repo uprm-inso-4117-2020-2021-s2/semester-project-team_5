@@ -1,7 +1,7 @@
 .orderContainer {
   border-radius: 45px;
-  background-color: #919191;
-  width: 65.5vw;
+  background-color: #124559;
+  width: auto;
   position: relative;
   display: flex;
   /* justify-content: center; */
@@ -32,6 +32,7 @@
 }
 .htext {
   display: flex;
+  color: white;
   /* position: absolute; */
   top: 80px;
   left: 80px;
