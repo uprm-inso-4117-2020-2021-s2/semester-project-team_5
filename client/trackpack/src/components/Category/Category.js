@@ -15,19 +15,34 @@ class Category extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     let data = this.props.categories;
     let something;
     if (data.categories) {
-      something = data.categories.map((category) => {
+      something = data.categories.map(async (category) => {
         const url = "http://localhost:5000";
         if (category.category_id) {
           let errorMessage;
-          axios
+          await axios
             .get(url + "/categories/" + category.category_id + "/packages")
-            .then((res) => {
+            .then(async (res) => {
               let packages = this.state.packages;
-              packages.push(res.data);
+
+              let modifiedValues = res.data
+
+              for(let i = 0; i < res.data.packages.length; i++){
+                let pack = res.data.packages[i]
+                let statuses = await axios
+                .get(url + "/packages/" + pack.package_id +"/packages-statuses")
+                .then((res) =>{
+                  pack.status = res.data.statuses[0]
+                  modifiedValues[i] = pack
+                })
+
+              }
+
+              packages.push(modifiedValues);        
+
               this.setState({ packages: packages });
               this.setState({ loading: false });
             })
@@ -39,6 +54,14 @@ class Category extends Component {
     }
     this.setState({ loading: false });
   }
+
+  convert(str) {
+    var date = new Date(str),
+      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+      day = ("0" + date.getDate()).slice(-2);
+    return [date.getFullYear(), mnth, day].join("-");
+  }
+  
 
   renderCategories(data) {
     if (data.categories) {
@@ -91,8 +114,13 @@ class Category extends Component {
   }
 
   renderPackages(packagesArr) {
+
     return packagesArr.map((packages) => {
+
       return packages.packages.map((pack) => {
+        let date = pack.status ? this.convert(pack.status.date) : ""
+        let description = pack.status ? pack.status.description: ""
+   
         return (
           <div
             className={
@@ -112,8 +140,8 @@ class Category extends Component {
               <span id="iName">{pack.name}</span>
             </div>
             <div className="itemInfo">
-              <span className="iInfo">Estimated delivery date: {}</span>
-              <span className="iInfo">Status: {}</span>
+              <span className="iInfo">Latest status update:  {date}</span>
+              <span className="iInfo">Status: {description}</span>
             </div>
           </div>
         );
@@ -122,7 +150,6 @@ class Category extends Component {
   }
 
   render() {
-    console.log(this.state.packages)
     return (
       <div style={{ padding: "5vw" }}>
         {this.renderCategories(this.props.categories)}
