@@ -14,31 +14,11 @@ export const AddPackage = async (packageData) => {
       .catch((err) => {
         errorMessage = err.response.data;
       });
-      console.log(res);
+
     if (!errorMessage) {
-      let filteredData;
-      filteredData = filterPackageData(res.carrier_info);
-      filteredData.package_id = res.package.package_id;
-      let packageStatus;
-      packageStatus.description = filteredData.status.description;
-      packageStatus.code = filteredData.status.code;
-      packageStatus.date = filteredData.date;
-      packageStatus.package_id = filteredData.package_id;
-      await axios
-        .post("http://localhost:5000/packages-statuses", packageStatus)
-        .then((response) => {
-          res = response.data;
-        })
-        .catch((err) => {
-          errorMessage = err.response.data;
-        });
-      if (errorMessage) {
-        return errorMessage;
-      }
-      console.log(res);
+      let result;
+      result = await filterPackageData(res.carrier_info, res.package.package_id);
       return res;
-    } else {
-      return errorMessage;
     }
   } else {
     return { message: "Tracking Number is invalid." };
@@ -79,15 +59,42 @@ const determineCarrier = (trackingNumber) => {
   }
 };
 
-const filterPackageData = (packagaData) => {
-  let result = {};
-  for (let pack in packagaData.trackResponse.shipment) {
-    for (let activity in pack) {
-      for (let activityItem in activity) {
-        result.date = new Date(activityItem.date);
-        result.time = activityItem.time;
-        result.location = activityItem.location.address;
-        result.status = activityItem.status;
+const filterPackageData = async (packagaData, package_id) => {
+  let result = [];
+  let currentInfo = {};
+  let packageStatus = {};
+  let errorMessage;
+  let res;
+  let shipment = packagaData.trackResponse.shipment;
+  console.log(packagaData)
+  for (let pack=0 ; pack < shipment.length; pack++) {
+    // console.log("pack", shipment[pack]);
+    for (let activity=0; activity < shipment[pack].package.length; activity++) {
+      // console.log("activity", shipment[pack].package);
+      for (let activityItem=0; activityItem < shipment[pack].package[activity].activity.length; activityItem++) {
+        currentInfo.date = shipment[pack].package[activity].activity[activityItem].date;
+        currentInfo.time = shipment[pack].package[activity].activity[activityItem].time
+        currentInfo.location = shipment[pack].package[activity].activity[activityItem].location.address
+        currentInfo.status = shipment[pack].package[activity].activity[activityItem].status
+        currentInfo.package_id = package_id;
+
+        packageStatus.description = currentInfo.status.description;
+        packageStatus.code = currentInfo.status.code;
+        packageStatus.date = currentInfo.date;
+        packageStatus.package_id = currentInfo.package_id;
+
+        await axios
+          .post("http://localhost:5000/packages-statuses", packageStatus)
+          .then((response) => {
+            res = response.data;
+          })
+          .catch((err) => {
+            errorMessage = err.response.data;
+          });
+        if (errorMessage) {
+          return errorMessage;
+        }
+        result.push(currentInfo);
       }
     }
   }

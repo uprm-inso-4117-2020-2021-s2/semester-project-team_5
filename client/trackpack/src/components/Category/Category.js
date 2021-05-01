@@ -122,6 +122,7 @@ class Category extends Component {
   }
 
   render() {
+    console.log(this.state.packages)
     return (
       <div style={{ padding: "5vw" }}>
         {this.renderCategories(this.props.categories)}

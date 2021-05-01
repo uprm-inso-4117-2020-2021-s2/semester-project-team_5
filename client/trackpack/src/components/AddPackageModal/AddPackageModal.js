@@ -90,7 +90,7 @@ const AddPackageModal = (props) => {
                     </FormControl>
                 </ModalBody> 
                 <ModalFooter>
-                <Button onClick={() => onSubmit({'tracking_number': trackingNumber, 'name': packageName, 'category_id': category, 'creation_date': "2021-04-29"})}>Add Package</Button>
+                <Button onClick={() => onSubmit({'tracking_number': trackingNumber, 'name': packageName, 'category_id': category, 'creation_date': "2021-04-29", "image_name": icon})}>Add Package</Button>
               </ModalFooter>
               </ModalContent>
               
