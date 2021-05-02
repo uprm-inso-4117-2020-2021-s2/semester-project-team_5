@@ -119,7 +119,7 @@ class PackageHandler:
                 # if not category_valid or not user_category:
                 #     return jsonify(message="You are trying to add the package to a category that doesn't belong to your account."), HttpStatus.BAD_REQUEST
                 
-                res = requests.get("https://wwwcie.ups.com/track/v1/details/" + str(json['tracking_number']), headers={
+                res = requests.get("https://onlinetools.ups.com/track/v1/details/" + str(json['tracking_number']), headers={
                     "Content-Type": "application/json",
                     "transId": "1234",
                     "transactionSrc": "TestTrack",

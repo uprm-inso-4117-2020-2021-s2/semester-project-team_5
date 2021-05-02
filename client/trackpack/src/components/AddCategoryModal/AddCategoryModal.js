@@ -19,7 +19,7 @@ const onSubmit = async (newCategory, onClose, categories) => {
   let res;
   res = await addCategory(newCategory);
   await categories.push({'category_id' : res.category.category_id, 'name' : newCategory.name, 'user_id': newCategory.user_id})
-  onClose()
+  window.location.reload();
 }
  
 var name = undefined;

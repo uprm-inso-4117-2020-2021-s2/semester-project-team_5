@@ -23,20 +23,22 @@ import { AddPackage } from "./AddPackage-services"
 
 const errors = {};
 
-const onSubmit = async (packageData) => {
-  console.log(packageData.category_id);
+const onSubmit = async (packageData, setSubmitPack) => {
+  // console.log(packageData.category_id);
+  setSubmitPack();
   let userId = localStorage.jwtToken
       ? jwt_decode(localStorage.jwtToken).sub
       : undefined;
   packageData.user_id = userId
   let res = await AddPackage(packageData);
-  // errors = res;
+  window.location.reload();
 }
 
 const AddPackageModal = (props) => {
     const [trackingNumber, setTrackingNumber] = useState("");
     const [packageName, setPackageName] = useState("");
     const [category, setCategory] = useState("");
+    const [submitPack, setSubmitPack] = useState(false);
     const {isAddingPackage, onClose, categories} = props;
 
     const [icon, setIcon] = useState("")
@@ -90,7 +92,7 @@ const AddPackageModal = (props) => {
                     </FormControl>
                 </ModalBody> 
                 <ModalFooter>
-                <Button onClick={() => onSubmit({'tracking_number': trackingNumber, 'name': packageName, 'category_id': category, 'creation_date': "2021-04-29", "image_name": icon})}>Add Package</Button>
+                <Button isLoading={submitPack} loadingText="Adding Package" onClick={() => onSubmit({'tracking_number': trackingNumber, 'name': packageName, 'category_id': category, 'creation_date': "2021-04-29", "image_name": icon}, () => setSubmitPack(true))}>Add Package</Button>
               </ModalFooter>
               </ModalContent>
               
