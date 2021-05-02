@@ -42,6 +42,23 @@
     flex-direction: column;
     justify-content: center;
   }
-  
 
-  
+  .orderContainer {
+    border-radius: 45px;
+    background-color: #124559;
+    width: auto;
+    position: relative;
+    display: flex;
+    /* justify-content: center; */
+    /* align-items: center; */
+    flex-direction: column;
+  }
+
+  .htext {
+    display: flex;
+    color: white;
+    /* position: absolute; */
+    top: 80px;
+    left: 80px;
+    font-size: 35px;
+  }

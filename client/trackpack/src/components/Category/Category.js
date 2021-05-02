@@ -3,7 +3,8 @@ import { IconPickerItem } from "react-fa-icon-picker";
 import axios from "axios";
 import "./Category.css";
 import { BsFillCaretDownFill, BsFillCaretUpFill } from "react-icons/bs";
-import { Box, Flex } from "@chakra-ui/layout";
+import { Box, Flex, Heading } from "@chakra-ui/layout";
+import Loader from "../Loader/Loader";
 
 class Category extends Component {
   constructor() {
@@ -16,41 +17,48 @@ class Category extends Component {
   }
 
   async componentDidMount() {
-    let data = this.props.categories;
+    console.log(this.props, "After calling componentDidMount");
+    let data = await this.props.categories;
+    // console.log("got props", this.props.categories);
     let something;
     if (data.categories) {
-      something = data.categories.map(async (category) => {
-        const url = "http://localhost:5000";
-        if (category.category_id) {
-          let errorMessage;
-          await axios
-            .get(url + "/categories/" + category.category_id + "/packages")
-            .then(async (res) => {
-              let packages = this.state.packages;
+      something = await Promise.all(
+        data.categories.map(async (category) => {
+          const url = "http://localhost:5000";
+          if (category.category_id) {
+            let errorMessage;
+            await axios
+              .get(url + "/categories/" + category.category_id + "/packages")
+              .then(async (res) => {
+                let packages = this.state.packages;
 
-              let modifiedValues = res.data
+                let modifiedValues = res.data;
 
-              for(let i = 0; i < res.data.packages.length; i++){
-                let pack = res.data.packages[i]
-                let statuses = await axios
-                .get(url + "/packages/" + pack.package_id +"/packages-statuses")
-                .then((res) =>{
-                  pack.status = res.data.statuses[0]
-                  modifiedValues[i] = pack
-                })
+                for (let i = 0; i < res.data.packages.length; i++) {
+                  let pack = res.data.packages[i];
+                  let statuses = await axios
+                    .get(
+                      url +
+                        "/packages/" +
+                        pack.package_id +
+                        "/packages-statuses"
+                    )
+                    .then((res) => {
+                      pack.status = res.data.statuses[0];
+                      modifiedValues[i] = pack;
+                    });
+                }
 
-              }
+                packages.push(modifiedValues);
 
-              packages.push(modifiedValues);        
-
-              this.setState({ packages: packages });
-              this.setState({ loading: false });
-            })
-            .catch((err) => {
-              errorMessage = err.response;
-            });
-        }
-      });
+                this.setState({ packages: packages });
+              })
+              .catch((err) => {
+                errorMessage = err.response;
+              });
+          }
+        })
+      );
     }
     this.setState({ loading: false });
   }
@@ -61,7 +69,6 @@ class Category extends Component {
       day = ("0" + date.getDate()).slice(-2);
     return [date.getFullYear(), mnth, day].join("-");
   }
-  
 
   renderCategories(data) {
     if (data.categories) {
@@ -114,13 +121,11 @@ class Category extends Component {
   }
 
   renderPackages(packagesArr) {
-
     return packagesArr.map((packages) => {
-
       return packages.packages.map((pack) => {
-        let date = pack.status ? this.convert(pack.status.date) : ""
-        let description = pack.status ? pack.status.description: ""
-   
+        let date = pack.status ? this.convert(pack.status.date) : "";
+        let description = pack.status ? pack.status.description : "";
+
         return (
           <div
             className={
@@ -140,7 +145,7 @@ class Category extends Component {
               <span id="iName">{pack.name}</span>
             </div>
             <div className="itemInfo">
-              <span className="iInfo">Latest status update:  {date}</span>
+              <span className="iInfo">Latest status update: {date}</span>
               <span className="iInfo">Status: {description}</span>
             </div>
           </div>
@@ -150,11 +155,23 @@ class Category extends Component {
   }
 
   render() {
-    return (
-      <div style={{ padding: "5vw" }}>
-        {this.renderCategories(this.props.categories)}
-      </div>
-    );
+    let content;
+    if (this.state.loading) {
+      content = <Loader />;
+    } else {
+      content = (
+        <div className="orderContainer">
+          <Box d="flex" justifyContent="center">
+            <Heading className="htext">{this.props.heading}:</Heading>
+          </Box>
+          <div style={{ padding: "5vw" }}>
+            {this.renderCategories(this.props.categories)}
+          </div>
+        </div>
+      );
+    }
+
+    return <div>{content}</div>;
   }
 }
 
