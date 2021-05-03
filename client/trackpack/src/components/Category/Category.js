@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { IconPickerItem } from 'react-fa-icon-picker'
+import { IconPickerItem } from "react-fa-icon-picker";
 import axios from "axios";
 import "./Category.css";
-import { BsFillCaretDownFill, BsFillCaretUpFill} from "react-icons/bs";
+import { BsFillCaretDownFill, BsFillCaretUpFill } from "react-icons/bs";
+import { Box, Flex, Heading } from "@chakra-ui/layout";
+import Loader from "../Loader/Loader";
 
 class Category extends Component {
   constructor() {
@@ -14,31 +16,64 @@ class Category extends Component {
     };
   }
 
-  componentDidMount() {
-    let data = this.props.categories;
+  async componentDidMount() {
+    console.log(this.props, "After calling componentDidMount");
+    let data = await this.props.categories;
+    let isInCurrentOrders = await this.props.isInCurrentOrders
+    // console.log("got props", this.props.categories);
     let something;
     if (data.categories) {
-      something = data.categories.map((category) => {
-        const url = "http://localhost:5000";
-        if (category.category_id) {
-          let errorMessage;
-          axios
-            .get(
-              url + "/categories/" + category.category_id + "/packages"
-            )
-            .then((res) => {
-              let packages = this.state.packages;
-              packages.push(res.data);
-              this.setState({ packages: packages });
-              this.setState({ loading: false });
-            })
-            .catch((err) => {
-              errorMessage = err.response;
-            });
-        }
-      });
+      something = await Promise.all(
+        data.categories.map(async (category) => {
+          const url = "http://localhost:5000";
+          if (category.category_id) {
+            let errorMessage;
+            await axios
+              .get(url + "/categories/" + category.category_id + "/packages")
+              .then(async (res) => {
+                let packages = this.state.packages;
+                let modifiedValues = res.data;
+
+                for (let i = 0; i < res.data.packages.length; i++) {
+                  let pack = res.data.packages[i];
+                  let statuses = await axios
+                    .get(
+                      url +
+                        "/packages/" +
+                        pack.package_id +
+                        "/packages-statuses"
+                    )
+                    .then((res) => {
+                      pack.status = res.data.statuses[0];
+                      modifiedValues[i] = pack;
+                    });
+                }
+                if(isInCurrentOrders){
+                    modifiedValues.packages = modifiedValues.packages.filter(pack => pack.status.description != "Delivered");
+                }
+                else{
+                    modifiedValues.packages = modifiedValues.packages.filter(pack => pack.status.description == "Delivered");
+                }
+
+                packages.push(modifiedValues);
+
+                this.setState({ packages: packages });
+              })
+              .catch((err) => {
+                errorMessage = err.response;
+              });
+          }
+        })
+      );
     }
-    this.setState({loading: false})
+    this.setState({ loading: false });
+  }
+
+  convert(str) {
+    var date = new Date(str),
+      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+      day = ("0" + date.getDate()).slice(-2);
+    return [date.getFullYear(), mnth, day].join("-");
   }
 
   renderCategories(data) {
@@ -55,23 +90,35 @@ class Category extends Component {
           }
           return null;
         });
-        if (catPackages) {
+        if (catPackages && catPackages.length > 0) {
           return (
             <React.Fragment>
-                  <span key={category.category_id} style={{marginLeft: "6vw"}}>{category.name}</span>
+              <Flex flexDir="column" justify="flex-start">
+                <Box>
+                  <span style={{ color: "white" }} key={category.category_id}>
+                    {category.name}
+                  </span>
 
-                  <button style={{marginLeft: "0.5vw"}} onClick={() =>{
-                    let map = this.state.categoriesHidden
-                    map[category.category_id] = !map[category.category_id]
-                    this.setState({categorysHidden: map})
-                  }}>
-                      <span>
-                        {this.state.categoriesHidden[category.category_id]  && (<BsFillCaretDownFill size="20px" />) }
-                        {!this.state.categoriesHidden[category.category_id]  && (<BsFillCaretUpFill size="20px" />) }
-                      </span>
+                  <button
+                    style={{ marginLeft: "0.5vw" }}
+                    onClick={() => {
+                      let map = this.state.categoriesHidden;
+                      map[category.category_id] = !map[category.category_id];
+                      this.setState({ categorysHidden: map });
+                    }}
+                  >
+                    <span>
+                      {this.state.categoriesHidden[category.category_id] && (
+                        <BsFillCaretDownFill size="20px" />
+                      )}
+                      {!this.state.categoriesHidden[category.category_id] && (
+                        <BsFillCaretUpFill size="20px" />
+                      )}
+                    </span>
                   </button>
-
-              {catPackages ? this.renderPackages(catPackages) : ""}
+                </Box>
+                {catPackages ? this.renderPackages(catPackages) : ""}
+              </Flex>
             </React.Fragment>
           );
         }
@@ -82,28 +129,55 @@ class Category extends Component {
   renderPackages(packagesArr) {
     return packagesArr.map((packages) => {
       return packages.packages.map((pack) => {
-        return  <div className={this.state.categoriesHidden[pack.category_id] ? "packageNoInfo" : "packageInfo"}>
-        <div className="imageContainer">
-              <IconPickerItem icon={pack.image_name} size={125} color="	#ffffff"/>  
-        </div>
-        <div className="itemName">
-          <span id="iName">{pack.name}</span>
-        </div>
-        <div className="itemInfo">
-          <span className="iInfo">Estimated delivery date: {}</span>
-          <span className="iInfo">Status: {}</span>
-        </div>
-      </div>;
+        let date = pack.status ? this.convert(pack.status.date) : "";
+        let description = pack.status ? pack.status.description : "";
+
+        return (
+          <div
+            className={
+              this.state.categoriesHidden[pack.category_id]
+                ? "packageNoInfo"
+                : "packageInfo"
+            }
+          >
+            <div className="imageContainer">
+              <IconPickerItem
+                icon={pack.image_name}
+                size={50}
+                color="	#ffffff"
+              />
+            </div>
+            <div className="itemName">
+              <span id="iName">{pack.name}</span>
+            </div>
+            <div className="itemInfo">
+              <span className="iInfo">Latest status update: {date}</span>
+              <span className="iInfo">Status: {description}</span>
+            </div>
+          </div>
+        );
       });
     });
   }
 
   render() {
-    return (
-      <div style={{padding: "10vw"}}>
-        {this.renderCategories(this.props.categories)}
-      </div>
-    );
+    let content;
+    if (this.state.loading) {
+      content = <Loader />;
+    } else {
+      content = (
+        <div className="orderContainer">
+          <Box d="flex" justifyContent="center">
+            <Heading className="htext">{this.props.heading}:</Heading>
+          </Box>
+          <div style={{ padding: "5vw" }}>
+            {this.renderCategories(this.props.categories)}
+          </div>
+        </div>
+      );
+    }
+
+    return <div>{content}</div>;
   }
 }
 

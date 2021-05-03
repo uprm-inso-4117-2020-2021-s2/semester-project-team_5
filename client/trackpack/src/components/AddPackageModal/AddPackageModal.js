@@ -14,9 +14,31 @@ import {
     Input,
     Select,
     Button,
+    Alert,
+    AlertIcon
    } from "@chakra-ui/react";
+import jwt_decode from "jwt-decode";
+
+import { AddPackage } from "./AddPackage-services"
+
+const errors = {};
+
+const onSubmit = async (packageData, setSubmitPack) => {
+  // console.log(packageData.category_id);
+  setSubmitPack();
+  let userId = localStorage.jwtToken
+      ? jwt_decode(localStorage.jwtToken).sub
+      : undefined;
+  packageData.user_id = userId
+  let res = await AddPackage(packageData);
+  window.location.reload();
+}
 
 const AddPackageModal = (props) => {
+    const [trackingNumber, setTrackingNumber] = useState("");
+    const [packageName, setPackageName] = useState("");
+    const [category, setCategory] = useState("");
+    const [submitPack, setSubmitPack] = useState(false);
     const {isAddingPackage, onClose, categories} = props;
 
     const [icon, setIcon] = useState("")
@@ -29,22 +51,30 @@ const AddPackageModal = (props) => {
                   Add a new package to track
                 </ModalHeader>
                 <ModalCloseButton />
+                <Alert
+                  hidden={!errors.message}
+                  borderRadius="8px"
+                  fontSize="x-small"
+                  status="error"
+                  marginBottom="8px"
+                >
+                  <AlertIcon />
+                  {errors.message}
+                </Alert>
                 <ModalBody>
                   <FormControl>
                       <FormLabel> 
                         Tracking Number 
                       </FormLabel>
-                      <Input placeholder="Enter Package Tracking Number" />   
+                      <Input onChange={e=> setTrackingNumber(e.target.value)} placeholder="Enter Package Tracking Number" />   
                   </FormControl>
                   <FormControl> 
                     <FormLabel>
                       Category
                     </FormLabel>
-                    <Select placeholder="Select a category">
-                      {/* in the future this will use the categories obtained from an API call. */ }
-                    {categories.map((value) =>  
-                    (
-                    <option key={value.category_id}>{value.name}</option>
+                    <Select onChange={e=> setCategory(e.target.value)} placeholder="Select a category">
+                    {categories.map((value) => (
+                    <option value={value.category_id} key={value.category_id}>{value.name}</option>
                     ))}
                     </Select>
                   </FormControl>
@@ -52,7 +82,7 @@ const AddPackageModal = (props) => {
                     <FormLabel>
                       Package Name
                     </FormLabel>
-                    <Input placeholder="Enter Package Name" />   
+                    <Input onChange={e=> setPackageName(e.target.value)} placeholder="Enter Package Name" />   
                   </FormControl>
                   <FormControl>
                     <FormLabel>
@@ -62,7 +92,7 @@ const AddPackageModal = (props) => {
                     </FormControl>
                 </ModalBody> 
                 <ModalFooter>
-                <Button>Add Package</Button>
+                <Button isLoading={submitPack} loadingText="Adding Package" onClick={() => onSubmit({'tracking_number': trackingNumber, 'name': packageName, 'category_id': category, 'creation_date': "2021-04-29", "image_name": icon}, () => setSubmitPack(true))}>Add Package</Button>
               </ModalFooter>
               </ModalContent>
               
