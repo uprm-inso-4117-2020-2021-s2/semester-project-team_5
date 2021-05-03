@@ -84,16 +84,7 @@ class Packages extends Component {
             </a>
           </li>
 
-          <div className="searchContainer">
-            <i className="magGlassIcon">
-              <BsSearch />
-            </i>
-            <input
-              type="search"
-              placeholder="Search an order"
-              className="searchBar"
-            ></input>
-          </div>
+          
         </div>
         <div className="line"></div>
 
