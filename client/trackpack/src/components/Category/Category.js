@@ -19,6 +19,7 @@ class Category extends Component {
   async componentDidMount() {
     console.log(this.props, "After calling componentDidMount");
     let data = await this.props.categories;
+    let isInCurrentOrders = await this.props.isInCurrentOrders
     // console.log("got props", this.props.categories);
     let something;
     if (data.categories) {
@@ -31,7 +32,6 @@ class Category extends Component {
               .get(url + "/categories/" + category.category_id + "/packages")
               .then(async (res) => {
                 let packages = this.state.packages;
-
                 let modifiedValues = res.data;
 
                 for (let i = 0; i < res.data.packages.length; i++) {
@@ -47,6 +47,12 @@ class Category extends Component {
                       pack.status = res.data.statuses[0];
                       modifiedValues[i] = pack;
                     });
+                }
+                if(isInCurrentOrders){
+                    modifiedValues.packages = modifiedValues.packages.filter(pack => pack.status.description != "Delivered");
+                }
+                else{
+                    modifiedValues.packages = modifiedValues.packages.filter(pack => pack.status.description == "Delivered");
                 }
 
                 packages.push(modifiedValues);
@@ -84,7 +90,7 @@ class Category extends Component {
           }
           return null;
         });
-        if (catPackages) {
+        if (catPackages && catPackages.length > 0) {
           return (
             <React.Fragment>
               <Flex flexDir="column" justify="flex-start">

@@ -99,13 +99,13 @@ class Packages extends Component {
 
         {this.state.isInCurrentOrders && (
             <Flex flexDir="row">
-              <Category categories={this.state.categories} heading="Current Orders"></Category>
+              <Category categories={this.state.categories} isInCurrentOrders={true} heading="Current Orders"></Category>
             </Flex>
         )}
 
         {!this.state.isInCurrentOrders && (
           <div>
-            <Category categories={this.state.categories} heading="Order History"></Category>
+            <Category categories={this.state.categories} isInCurrentOrders={false} heading="Order History"></Category>
            </div>
         )}
         <div style={{ display: "flex" }} className="orderList">
