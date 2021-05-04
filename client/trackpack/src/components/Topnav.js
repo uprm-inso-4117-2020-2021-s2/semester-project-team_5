@@ -23,9 +23,9 @@ const Topnav = () => {
   if (!user) {
     content = (
       <Nav className="mr-auto">
-        <Nav.Link as={Link} exact to="/packages">
+        {/* <Nav.Link as={Link} exact to="/packages">
           Tracking
-        </Nav.Link>
+        </Nav.Link> */}
         <Nav.Link as={Link} exact to="/signin">
           Sign in
         </Nav.Link>
