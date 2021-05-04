@@ -11,6 +11,7 @@ import OrderInfo from "./views/orderInformation/orderInfo";
 import "bootstrap/dist/css/bootstrap.min.css";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
+import backgroundImage from "./assets/background-app.png"
 
 // Check for token to keep user logged in
 if (localStorage.jwtToken) {
@@ -31,33 +32,33 @@ if (localStorage.jwtToken) {
 
 function App() {
   return (
-    <ChakraProvider>
-      <Router>
-        <div>
-          <Topnav />
-          <Switch>
-            <Route exact path="/">
-              <Homepage title="Homepage" />
-            </Route>
-            <Route path="/signup">
-              <Signup />
-            </Route>
-            <Route path="/signin">
-              <Signin />
-            </Route>
-            <Route path="/packages">
-              <Packages />
-            </Route>
-            <Route path="/trackPackage">
-              <TrackPackage />
-            </Route>
-            <Route path="/orderInformation">
-              <OrderInfo />
-            </Route>
-          </Switch>
-        </div>
-      </Router>
-    </ChakraProvider>
+      <ChakraProvider>
+        <Router>
+          <div style={{backgroundImage: `url(${backgroundImage})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', minHeight: 3000}}>
+            <Topnav />
+            <Switch>
+              <Route exact path="/">
+                <Homepage title="Homepage" />
+              </Route>
+              <Route path="/signup">
+                <Signup />
+              </Route>
+              <Route path="/signin">
+                <Signin />
+              </Route>
+              <Route path="/packages">
+                <Packages />
+              </Route>
+              <Route path="/trackPackage">
+                <TrackPackage />
+              </Route>
+              <Route path="/orderInformation">
+                <OrderInfo />
+              </Route>
+            </Switch>
+          </div>
+        </Router>
+      </ChakraProvider>
   );
 }
 
